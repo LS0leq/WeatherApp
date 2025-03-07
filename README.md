@@ -31,9 +31,15 @@ Naszym celem jest stworzenie **intuicyjnej aplikacji pogodowej** w Pythonie, dos
    - 🌍 **Jakość powietrza**
    - ☀️ **Indeks UV**
 
-✔ **Personalizacja** – Możliwość **zapisu ulubionych lokalizacji** i ustawień użytkownika
+✔ **Personalizacja** – Możliwość **zapisu ulubionych lokalizacji** i ustawień użytkownika. Możliwość personalizowania aplikacji według upodobań użytkownika (zmiana motywów aplikacji).
 
-✔ **Ekologiczne podejście** – Sugestie ekologicznych działań, np. **oszczędzanie wody** podczas suszy
+✔ **Ekologiczne podejście** – Sugestie ekologicznych działań, np. **oszczędzanie wody** podczas suszy.
+
+✔ **Troska o zdrowie użytkownika** - W miare wysokich zanieczyszczeń powietrza, aplikacja będzie informować użytkownika o niebezpieczeństwach.
+
+✔ **Łatwy dostęp do informacji** – Zapewnienie intuicyjnego interfejsu umożliwiającego szybkie sprawdzanie pogody.
+   
+✔ **Tryb offline** – Przechowywanie ostatnich prognoz na wypadek braku połączenia z internetem.
 
 ---
 
