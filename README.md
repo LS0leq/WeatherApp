@@ -74,7 +74,7 @@ Naszym celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostęp
 
 ---
 
-## 📅 **Harmonogram prac:**
+## 📅 **Harmonogram prac (stan na 07.03.2025):**
 ✅ **Zapoznanie z projektem**, dobór ról oraz przygotowanie tasków do konkretnych osób.
 
 ⏳ **Praca nad projektem**, zarządzanie kodem, współpraca między rolami.
