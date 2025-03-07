@@ -60,7 +60,7 @@ Naszym celem jest stworzenie **intuicyjnej aplikacji pogodowej** w Pythonie, dos
 
 ---
 
-## 💡 Możliwości rozwoju projektu:**
+## 💡 Możliwości rozwoju projektu:
 
 - **Rozszerzenie** na inne platformy – Stworzenie wersji na iOS, Android oraz jako aplikacja webowa.
 
