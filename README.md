@@ -31,15 +31,18 @@ Naszym celem jest stworzenie **intuicyjnej aplikacji pogodowej** w Pythonie, dos
    - 🌍 **Jakość powietrza**
    - ☀️ **Indeks UV**
 
-✔ **Personalizacja** – Możliwość **zapisu ulubionych lokalizacji** i ustawień użytkownika. Możliwość personalizowania aplikacji według upodobań użytkownika (zmiana motywów aplikacji).
+✔ **Personalizacja** – Możliwość **zapisu ulubionych lokalizacji** i ustawień użytkownika
 
-✔ **Ekologiczne podejście** – Sugestie ekologicznych działań, np. **oszczędzanie wody** podczas suszy.
+✔ **Ekologiczne podejście** – Sugestie ekologicznych działań, np. **oszczędzanie wody** podczas suszy
 
-✔ **Troska o zdrowie użytkownika** - W miare wysokich zanieczyszczeń powietrza, aplikacja będzie informować użytkownika o niebezpieczeństwach.
+---
 
-✔ **Łatwy dostęp do informacji** – Zapewnienie intuicyjnego interfejsu umożliwiającego szybkie sprawdzanie pogody.
-   
-✔ **Tryb offline** – Przechowywanie ostatnich prognoz na wypadek braku połączenia z internetem.
+## 🏅 **Korzyści dla użytkowników:**
+✔ **Zdrowie** – Informowanie o jakości powietrza oraz wysokim indeksie UV, aby chronić użytkowników.
+
+✔ **Planowanie** – Prognozy długoterminowe, które pomogą planować wyjazdy i aktywności na świeżym powietrzu.
+
+✔ **Spersonalizowane alerty** – Powiadomienia o zmianach pogodowych w czasie rzeczywistym.
 
 ---
 
@@ -54,6 +57,14 @@ Naszym celem jest stworzenie **intuicyjnej aplikacji pogodowej** w Pythonie, dos
   - 🔹 **Discord** (sprinty 2 razy w tygodniu)
   - 🔹 **Adobe Photoshop / Illustrator** (grafika do aplikacji)
   - 🔹 **GitHub** (repozytorium kodu)
+
+---
+
+## 💡 Możliwości rozwoju projektu:**
+
+- **Rozszerzenie** na inne platformy – Stworzenie wersji na iOS, Android oraz jako aplikacja webowa.
+
+- **Dodanie widgetów** – Udostępnienie informacji pogodowych bezpośrednio na ekranie głównym urządzenia.
 
 ---
 
