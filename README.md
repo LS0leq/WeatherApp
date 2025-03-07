@@ -75,6 +75,49 @@ Naszym celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostęp
 
 ---
 
+# **🚀 Kamienie milowe projektu**
+
+## **📌 I. Planowanie i analiza (14.02.2025 – 07.03.2025)**  
+✅ Zebranie wymagań i ustalenie funkcjonalności aplikacji.  
+✅ Podział ról w zespole i ustalenie harmonogramu sprintów.  
+✅ Wybór technologii i źródeł danych (API pogodowe, biblioteki).  
+✅ Stworzenie pierwszej wersji dokumentacji projektu.  
+
+## **📌 II. Pierwsza wersja aplikacji (07.03.2025 – 21.03.2025)**  
+✅ Implementacja podstawowych funkcji:  
+   - Pobieranie danych pogodowych (temperatura, ciśnienie, wilgotność).  
+   - Pobieranie jakości powietrza (AQI).  
+   - Interfejs użytkownika w Tkinter.  
+
+⏳ Testy pierwszej wersji – weryfikacja poprawności danych.  
+
+## **📌 III. Rozbudowa funkcji i personalizacja (przełom marca/kwietnia)**  
+⏳ Dodanie dodatkowych danych pogodowych:  
+   - 🌞 Indeks UV  
+   - 💨 Prędkość i kierunek wiatru  
+   - 🌧️ Opady  
+
+⏳ Możliwość zapisu ulubionych lokalizacji.  
+⏳ Implementacja rekomendacji (np. "Zabierz parasol", "Dobra pogoda na rower").  
+
+## **📌 IV. Optymalizacja i testy (kwiecień)**  
+⏳ Wprowadzenie poprawek na podstawie testów.  
+⏳ Optymalizacja kodu – poprawienie wydajności.  
+⏳ Testy użytkowników – zbieranie opinii i zgłaszanie błędów.  
+
+## **📌 V. Finalizacja wersji komputerowej (okolice maja)**  
+⏳ Poprawki UI/UX – dopracowanie interfejsu użytkownika.  
+⏳ Stworzenie finalnej dokumentacji technicznej.  
+⏳ Przygotowanie prezentacji i omówienie projektu.  
+
+## **📌 VI. Rozwój aplikacji i wersja mobilna (po zakończeniu wersji desktopowej)**  
+🔜 Badanie możliwości stworzenia aplikacji na urządzenia mobilne.  
+🔜 Analiza technologii (np. Kivy, Flutter, React Native).  
+🔜 Możliwość dodania **widgetów pogodowych** i wersji **offline**.  
+
+---
+
+
 ## 📅 **Harmonogram prac (stan na 07.03.2025):**
 ✅ **Zapoznanie z projektem**, dobór ról oraz przygotowanie tasków do konkretnych osób.
 
