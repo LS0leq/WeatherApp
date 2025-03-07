@@ -96,11 +96,7 @@ Naszym celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostęp
 ⏳ Testy pierwszej wersji – weryfikacja poprawności danych.  
 
 ## **📌 III. Rozbudowa funkcji i personalizacja (przełom marca/kwietnia)**  
-⏳ Dodanie dodatkowych danych pogodowych:  
-   - 🌞 Indeks UV  
-   - 💨 Prędkość i kierunek wiatru  
-   - 🌧️ Opady  
-
+⏳ Dodanie dodatkowych danych pogodowych:    
 ⏳ Możliwość zapisu ulubionych lokalizacji.  
 ⏳ Implementacja rekomendacji (np. "Zabierz parasol", "Dobra pogoda na rower").  
 
