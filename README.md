@@ -29,8 +29,10 @@ Naszym celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostęp
 
 ✔ **Funkcjonalność** – Oprócz podstawowych informacji (np. temperatura, opady) aplikacja może zawierać:
    - 🌍 **Jakość powietrza**
-   - ☀️ **Indeks UV**
-
+   - 🌡️ **Temperatura**
+   - ☀️ **Ciśnienie**
+   - 🌪️ **Prędkość wiatru**
+   
 ✔ **Personalizacja** – Możliwość **zapisu ulubionych lokalizacji** i ustawień użytkownika
 
 ✔ **Rekomendacje na podstawie pogody** – Np. sugerowanie ubioru, aktywności sportowych czy warunków do jazdy samochodem.
