@@ -29,7 +29,6 @@ Naszym celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostęp
 
 ✔ **Funkcjonalność** – Oprócz podstawowych informacji (np. temperatura, opady) aplikacja może zawierać:
    - 🌍 **Jakość powietrza**
-   - 🌡️ **Temperatura**
    - ☀️ **Ciśnienie**
    - 🌪️ **Prędkość wiatru**
    
@@ -38,8 +37,6 @@ Naszym celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostęp
 ✔ **Rekomendacje na podstawie pogody** – Np. sugerowanie ubioru, aktywności sportowych czy warunków do jazdy samochodem.
 
 ✔ **Ekologiczne podejście** – Sugestie ekologicznych działań, np. **oszczędzanie wody** podczas suszy
-
-✔ **Tryb offline** – Przechowywanie ostatnich prognoz na wypadek braku połączenia z internetem.
 
 ---
 
@@ -73,6 +70,8 @@ Naszym celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostęp
 - **Aplikacja na smartwatche** – Szybki dostęp do prognozy na urządzeniach typu Apple Watch, Wear OS.
 
 - **Subskrypcja** – Dodatkowe funkcje, np. powiadomienia o zjawiskach ekstremalnych w czasie rzeczywistym.
+
+- **Tryb offline** – Przechowywanie ostatnich prognoz na wypadek braku połączenia z internetem.
 
 ---
 
