@@ -30,6 +30,8 @@ Naszym celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostęp
 ✔ **Funkcjonalność** – Oprócz podstawowych informacji (np. temperatura, opady) aplikacja może zawierać:
    - 🌍 **Jakość powietrza**
    - ☀️ **Indeks UV**
+   - 
+✔ **Tryb nocny i jasny** 🌙☀️ – Automatyczne dopasowanie motywu do pory dnia.
 
 ✔ **Personalizacja** – Możliwość **zapisu ulubionych lokalizacji** i ustawień użytkownika
 
@@ -71,6 +73,8 @@ Naszym celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostęp
 - **Aplikacja na smartwatche** – Szybki dostęp do prognozy na urządzeniach typu Apple Watch, Wear OS.
 
 - **Subskrypcja** – Dodatkowe funkcje, np. powiadomienia o zjawiskach ekstremalnych w czasie rzeczywistym.
+
+- **Obsługa chatbotów** – Pogoda dostępna przez Messengera lub Discorda.
 
 ---
 
