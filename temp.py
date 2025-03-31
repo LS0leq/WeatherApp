@@ -90,7 +90,8 @@ class CarbonApp:
 
         self.favorites_listbox = tk.Listbox(self.root, height=5, width=40)
         self.favorites_listbox.pack()
-
+        self.delete_button = tk.Button(self.root, text="Usuń", command=self.delete_favorite)
+        self.delete_button.pack()
         self.update_favorites_listbox()
         self.favorites_listbox.bind("<Double-1>", self.selected_favorite)
 
@@ -104,14 +105,26 @@ class CarbonApp:
         state = self.selected_state.get()
         city = self.selected_city.get()
 
-        if state and city:
+        try:
+            with open("favorites.txt") as f:
+                self.favorite_locations = f.read().splitlines()
+        except FileNotFoundError:
+            self.favorite_locations = []
 
-            self.favorite_locations.append(f"{state}, {city}")
-            self.update_favorites_listbox()
-            self.save_to_file()
-            messagebox.showinfo("Sukces", f"Lokalizacja {state}, {city} została dodana do ulubionych.")
+        if(f"{state}, {city}" in self.favorite_locations):
+            messagebox.showwarning("Błąd", "Lokalizacja jest już na liście ulubionych.")
+            return
         else:
-            messagebox.showwarning("Błąd", "Proszę wybrać zarówno województwo, jak i miasto.")
+            if state and city:
+
+                self.favorite_locations.append(f"{state}, {city}")
+                self.update_favorites_listbox()
+                self.save_to_file()
+                messagebox.showinfo("Sukces", f"Lokalizacja {state}, {city} została dodana do ulubionych.")
+            else:
+                messagebox.showwarning("Błąd", "Proszę wybrać zarówno województwo, jak i miasto.")
+
+
 
     def update_favorites_listbox(self):
         self.favorites_listbox.delete(0, tk.END)
@@ -164,6 +177,16 @@ class CarbonApp:
         except requests.exceptions.RequestException as e:
             messagebox.showerror("Błąd", f"Wystąpił błąd: {e}")
 
+    def delete_favorite(self):
+        selected = self.favorites_listbox.curselection()
+        if selected:
+            location = self.favorite_locations[selected[0]]
+            self.favorite_locations.remove(location)
+            self.update_favorites_listbox()
+            self.save_to_file()
+            messagebox.showinfo("Sukces", f"Lokalizacja {location} została usunięta z ulubionych.")
+        else:
+            messagebox.showwarning("Błąd", "Proszę wybrać lokalizację do usunięcia.")
     def get_color_based_on_aqi(self, aqi):
         if aqi <= 50:
             return "green"
