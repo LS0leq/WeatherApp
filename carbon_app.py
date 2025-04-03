@@ -3,8 +3,11 @@ from tkinter import ttk, messagebox
 import requests
 import json
 
+# Ścieżka do pliku z ulubionymi lokalizacjami
 FILENAME = "favorite_locations.json"
 
+
+# Funkcja, która zwraca sugestie dotyczące ubioru na podstawie temperatury
 def get_outfit_suggestion(temperature):
     if temperature <= 0:
         return "Ciepły płaszcz, szalik, czapka, rękawiczki."
@@ -17,6 +20,8 @@ def get_outfit_suggestion(temperature):
     else:
         return "Woda, krem z filtrem, lekkie ubrania."
 
+
+# Funkcja, która zwraca sugestie dotyczące aktywności na świeżym powietrzu
 def get_activity_suggestion(temperature, wind_speed):
     if temperature <= 0:
         return "Zaleca się unikanie długich spacerów na zewnątrz. Możesz rozważyć aktywności w zamkniętych pomieszczeniach."
@@ -33,6 +38,8 @@ def get_activity_suggestion(temperature, wind_speed):
     else:
         return "Możesz uprawiać aktywności na świeżym powietrzu, ale pamiętaj o odpowiedniej ochronie przed słońcem."
 
+
+# Funkcja, która zwraca sugestie dotyczące zagrożeń związanych z pogodą
 def get_hazard_suggestion(temperature, humidity, wind_speed):
     if temperature <= 0:
         return "Zimno, możliwe oblodzenia. Uważaj na śliskie drogi."
@@ -49,16 +56,21 @@ def get_hazard_suggestion(temperature, humidity, wind_speed):
     else:
         return "Wysokie temperatury. Pamiętaj o ochronie przed słońcem."
 
+
 class CarbonApp(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
         self.configure(bg='#ADD8E6')
 
+        # Zmienna do przechowywania wybranego województwa i miasta
         self.selected_state = tk.StringVar()
         self.selected_city = tk.StringVar()
+
+        # Wczytanie zapisanych ulubionych lokalizacji z pliku
         self.favorite_locations = self.load_favorite_locations()
 
+        # Lista dostępnych województw i miast
         self.countries_and_cities = [
             {"country": "Polska", "state": "Pomorskie",
              "cities": ["Bytów", "Gdańsk", "Gdynia", "Kościerzyna", "Pogórze", "Sopot"]},
@@ -109,41 +121,80 @@ class CarbonApp(tk.Frame):
             "Zachodnio Pomorskie": "West%Pomerania"
         }
 
+        # UI: Etykieta i combobox dla województwa
         tk.Label(self, text="Województwo:", bg='#87CEEB', font=('Arial', 14, 'bold')).pack(pady=5)
         self.state_combobox = ttk.Combobox(self, textvariable=self.selected_state, font=('Arial', 12))
         self.state_combobox['values'] = [item['state'] for item in self.countries_and_cities]
         self.state_combobox.bind("<<ComboboxSelected>>", self.on_state_selected)
         self.state_combobox.pack(pady=5)
 
+        # UI: Etykieta i combobox dla miasta
         tk.Label(self, text="Miasto:", bg='#87CEEB', font=('Arial', 14, 'bold')).pack(pady=5)
         self.city_combobox = ttk.Combobox(self, textvariable=self.selected_city, font=('Arial', 12))
         self.city_combobox.pack(pady=5)
 
+        # UI: Przycisk do sprawdzania pogody
         tk.Button(self, text="Sprawdź pogodę", command=self.fetch_data, font=('Arial', 14, 'bold'),
                   bg='#4682B4', fg='white').pack(pady=10)
 
+        # UI: Label do wyświetlania wyników
         self.result_label = tk.Label(self, text="", bg='#FFFFFF', font=('Arial', 14), wraplength=350)
         self.result_label.pack(pady=5)
 
+        # UI: Przycisk do zapisywania ulubionej lokalizacji
         tk.Button(self, text="Zapisz lokalizację", command=self.save_favorite_location, font=('Arial', 12, 'bold'),
                   bg='#4682B4', fg='white').pack(pady=5)
 
+        # UI: Etykieta i combobox dla ulubionych lokalizacji
         tk.Label(self, text="Ulubione lokalizacje:", bg='#87CEEB', font=('Arial', 14, 'bold')).pack(pady=5)
         self.fav_locations_combobox = ttk.Combobox(self, font=('Arial', 12))
         self.fav_locations_combobox['values'] = [f"{loc['state']}, {loc['city']}" for loc in self.favorite_locations]
         self.fav_locations_combobox.bind("<<ComboboxSelected>>", self.on_favorite_selected)
         self.fav_locations_combobox.pack(pady=5)
 
-        # Przycisk usuwania ulubionej lokalizacji
-        tk.Button(self, text="Usuń lokalizację", command=self.remove_favorite_location, font=('Arial', 12, 'bold'),
-                  bg='#B22222', fg='white').pack(pady=5)
+        # UI: Przycisk do przejścia do mapy pogodowej
+        tk.Button(self, text="Mapa pogodowa", command=self.show_weather_map, font=('Arial', 12, 'bold'),
+                  bg='#32CD32', fg='white').pack(pady=5)
 
+        # UI: Przycisk do usuwania lokalizacji
+        tk.Button(self, text="Usuń lokalizację", command=self.delete_favorite_location, font=('Arial', 12, 'bold'),
+                  bg='#FF6347', fg='white').pack(pady=5)
+
+    # Funkcja do przejścia do strony z mapą pogodową
+    def show_weather_map(self):
+        self.controller.show_frame("PollutionMapPage")
+
+    # Funkcja do usuwania wybranej lokalizacji z ulubionych
+    def delete_favorite_location(self):
+        selected_location = self.fav_locations_combobox.get()
+
+        if selected_location:
+            # Rozdzielamy stan i miasto z wybranej lokalizacji
+            state, city = selected_location.split(", ")
+            # Usuwamy wybraną lokalizację z listy
+            self.favorite_locations = [loc for loc in self.favorite_locations if
+                                       not (loc['state'] == state and loc['city'] == city)]
+
+            # Zapisujemy zaktualizowaną listę lokalizacji do pliku
+            with open(FILENAME, "w") as file:
+                json.dump(self.favorite_locations, file)
+
+            # Aktualizujemy Combobox z ulubionymi lokalizacjami
+            self.fav_locations_combobox['values'] = [f"{loc['state']}, {loc['city']}" for loc in
+                                                     self.favorite_locations]
+            messagebox.showinfo("Sukces", "Lokalizacja usunięta!")
+
+        else:
+            messagebox.showerror("Błąd", "Proszę wybrać lokalizację do usunięcia.")
+
+    # Funkcja wywoływana przy wyborze województwa
     def on_state_selected(self, event):
         selected_state = self.selected_state.get()
         cities = next((item['cities'] for item in self.countries_and_cities if item['state'] == selected_state), [])
         self.city_combobox['values'] = cities
         self.city_combobox.set("")
 
+    # Funkcja do pobierania i wyświetlania danych pogodowych
     def fetch_data(self):
         city = self.selected_city.get()
 
@@ -190,6 +241,7 @@ class CarbonApp(tk.Frame):
         except requests.RequestException as e:
             messagebox.showerror("Błąd", f"Wystąpił błąd: {e}")
 
+    # Funkcja do zapisywania ulubionej lokalizacji
     def save_favorite_location(self):
         location = {"state": self.selected_state.get(), "city": self.selected_city.get()}
         self.favorite_locations.append(location)
@@ -198,6 +250,7 @@ class CarbonApp(tk.Frame):
         self.fav_locations_combobox['values'] = [f"{loc['state']}, {loc['city']}" for loc in self.favorite_locations]
         messagebox.showinfo("Sukces", "Lokalizacja zapisana!")
 
+    # Funkcja do wczytania zapisanych ulubionych lokalizacji
     def load_favorite_locations(self):
         try:
             with open(FILENAME, "r") as file:
@@ -205,6 +258,7 @@ class CarbonApp(tk.Frame):
         except (FileNotFoundError, json.JSONDecodeError):
             return []
 
+    # Funkcja wywoływana przy wyborze ulubionej lokalizacji
     def on_favorite_selected(self, event):
         selected = self.fav_locations_combobox.get()
         state, city = selected.split(", ")
@@ -212,22 +266,12 @@ class CarbonApp(tk.Frame):
         self.on_state_selected(None)
         self.selected_city.set(city)
 
-    def remove_favorite_location(self):
-        """ Funkcja usuwająca wybraną lokalizację z listy ulubionych i pliku """
-        selected_location = self.fav_locations_combobox.get()
 
-        if selected_location:
-            state, city = selected_location.split(", ")
-            # Usuwamy lokalizację z listy
-            self.favorite_locations = [loc for loc in self.favorite_locations if not (loc['state'] == state and loc['city'] == city)]
-
-            # Zapisujemy zaktualizowaną listę do pliku
-            with open(FILENAME, "w") as file:
-                json.dump(self.favorite_locations, file)
-
-            # Aktualizujemy combobox z ulubionymi lokalizacjami
-            self.fav_locations_combobox['values'] = [f"{loc['state']}, {loc['city']}" for loc in self.favorite_locations]
-
-            messagebox.showinfo("Sukces", f"Lokalizacja '{selected_location}' została usunięta.")
-        else:
-            messagebox.showwarning("Brak lokalizacji", "Proszę wybrać lokalizację do usunięcia.")
+# Uruchomienie aplikacji
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("Aplikacja Pogodowa")
+    root.geometry("400x600")
+    app = CarbonApp(root, None)
+    app.pack(expand=True, fill="both")
+    root.mainloop()
