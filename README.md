@@ -93,12 +93,12 @@ Naszym celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostęp
    - Pobieranie jakości powietrza (AQI).  
    - Interfejs użytkownika w Tkinter.  
 
-⏳ Testy pierwszej wersji – weryfikacja poprawności danych.  
+✅ Testy pierwszej wersji – weryfikacja poprawności danych.  
 
 ## **📌 III. Rozbudowa funkcji i personalizacja (przełom marca/kwietnia)**  
-⏳ Dodanie dodatkowych danych pogodowych:    
-⏳ Możliwość zapisu ulubionych lokalizacji.  
-⏳ Implementacja rekomendacji (np. "Zabierz parasol", "Dobra pogoda na rower").  
+✅ Dodanie dodatkowych danych pogodowych:    
+✅ Możliwość zapisu ulubionych lokalizacji.  
+✅ Implementacja rekomendacji (np. "Zabierz parasol", "Dobra pogoda na rower").  
 
 ## **📌 IV. Optymalizacja i testy (kwiecień)**  
 ⏳ Wprowadzenie poprawek na podstawie testów.  
