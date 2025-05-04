@@ -2,6 +2,10 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import requests
 from datetime import datetime
+import urllib.parse
+
+from future.backports.datetime import timedelta
+
 
 class CarbonApp:
     def __init__(self, root):
@@ -61,6 +65,54 @@ class CarbonApp:
         except FileNotFoundError:
             self.favorite_locations = []
 
+    def fetch_forecast_data(self):
+        city = self.selected_city.get()
+        now = datetime.now()
+        date = now.strftime("%Y-%m-%d")
+        x=0
+        current_Hour=int(now.strftime("%H"))
+
+
+        if not city:
+            messagebox.showerror("Błąd", "Proszę wybrać miasto.")
+            return
+
+        api_key = "YLN4LMRPLRV8HQF7KVCGC4MCK"
+        url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{city}/{date}?key={api_key}&include=hours"
+
+
+        try:
+            response = requests.get(url)
+            response.raise_for_status()
+            data = response.json()
+
+            hours = data["days"][0]["hours"]
+            target=[
+                f"{(current_Hour - 5):02d}:00:00",
+                f"{(current_Hour - 4):02d}:00:00",
+                f"{(current_Hour - 3):02d}:00:00",
+                f"{(current_Hour - 2):02d}:00:00",
+                f"{(current_Hour - 1):02d}:00:00",
+                f"{current_Hour}:00:00"
+            ]
+            results=[]
+
+            for hours_data in hours:
+                if hours_data["datetime"] in target:
+                    hoursData= hours_data
+                    temp = hours_data .get("temp", "brak")
+                    humidity = hours_data  .get("humidity", "brak")
+                    conditions = hours_data .get("conditions", "brak")
+                    results.append(f"{hoursData} - Temp: {temp}°C, Wilgotność: {humidity}%, Warunki: {conditions}")
+
+            with open("weather_data.txt", "w") as f:
+                for result in results:
+                    f.write(result + "\n")
+
+        except requests.exceptions.RequestException as e:
+            messagebox.showerror(e)
+
+
     def create_widgets(self):
         self.state_label = tk.Label(self.root, text="Województwo:")
         self.state_label.pack()
@@ -92,6 +144,8 @@ class CarbonApp:
         self.favorites_listbox.pack()
         self.delete_button = tk.Button(self.root, text="Usuń", command=self.delete_favorite)
         self.delete_button.pack()
+        self.forecast_button=tk.Button(self.root, text="Sprawdź prognozę pogody(AI)", command=self.fetch_forecast_data)
+        self.forecast_button.pack()
         self.update_favorites_listbox()
         self.favorites_listbox.bind("<Double-1>", self.selected_favorite)
 
