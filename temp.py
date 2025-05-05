@@ -1,10 +1,10 @@
+import os
 import tkinter as tk
 from tkinter import ttk, messagebox
 import requests
-from datetime import datetime
-import urllib.parse
-
-from future.backports.datetime import timedelta
+from datetime import datetime, timedelta
+import pandas as pd
+import re
 
 
 class CarbonApp:
@@ -58,6 +58,40 @@ class CarbonApp:
         with open("favorites.txt", "w") as f:
             f.write("\n".join(self.favorite_locations))
 
+    def generate(self):
+        try:
+            with open("weather_data.txt", "r") as file:
+                lines = file.readlines()
+
+            if len(lines) == 0:
+                messagebox.showwarning("Błąd", "Plik weather_data.txt jest pusty.")
+                return
+
+            temperatures = []
+
+            for line in lines:
+                match = re.search(r"Temp: ([\d.]+)", line)
+                if match:
+                    temp = float(match.group(1))
+                    temperatures.append(temp)
+
+            if len(temperatures) < 7:
+                raise ValueError("Za mało danych pogodowych (minimum 7 temperatur potrzebne)")
+
+            rows = []
+            for i in range(len(temperatures) - 6):
+                row = temperatures[i:i + 7]
+                rows.append(row)
+
+            columns = ['t-6','t-5', 't-4', 't-3', 't-2', 't-1', 't']
+            df = pd.DataFrame(rows, columns=columns)
+
+            df.to_csv("ml_dataset.csv", index=False)
+            print("Zapisano dane do ml_dataset.csv")
+
+        except Exception as e:
+            messagebox.showerror("Błąd", f"Wystąpił błąd przy generowaniu datasetu: {str(e)}")
+
     def open_from_file(self):
         try:
             with open("favorites.txt") as f:
@@ -66,51 +100,83 @@ class CarbonApp:
             self.favorite_locations = []
 
     def fetch_forecast_data(self):
+        import pickle
+        import pandas as pd
+        from pathlib import Path
+
         city = self.selected_city.get()
         now = datetime.now()
         date = now.strftime("%Y-%m-%d")
-        x=0
-        current_Hour=int(now.strftime("%H"))
-
+        current_Hour = int(now.strftime("%H"))
+        weather_data = []
+        api_key = "J9GRDM7ZWDRAPYKUF2DFYNMVQ"
 
         if not city:
             messagebox.showerror("Błąd", "Proszę wybrać miasto.")
             return
 
-        api_key = "YLN4LMRPLRV8HQF7KVCGC4MCK"
-        url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{city}/{date}?key={api_key}&include=hours"
+        for day_offset in range(20):
+            date = (datetime.now() - timedelta(days=day_offset)).strftime("%Y-%m-%d")
+            url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{city}/{date}?key={api_key}&include=hours"
+
+            try:
+                response = requests.get(url)
+                response.raise_for_status()
+                data = response.json()
+
+                hours = data["days"][0]["hours"]
+                target = [
+                    f"{(current_Hour - 6):02d}:00:00",
+                    f"{(current_Hour - 5):02d}:00:00",
+                    f"{(current_Hour - 4):02d}:00:00",
+                    f"{(current_Hour - 3):02d}:00:00",
+                    f"{(current_Hour - 2):02d}:00:00",
+                    f"{(current_Hour - 1):02d}:00:00",
+                    f"{current_Hour}:00:00"
+                ]
+
+                temps = []
+                for hour_data in hours:
+                    if hour_data["datetime"] in target:
+                        temp = hour_data.get("temp", "brak")
+                        humidity = hour_data.get("humidity", "brak")
+                        conditions = hour_data.get("conditions", "brak")
+                        temps.append(temp)
+                        weather_data.append({
+                            "date": date,
+                            "time": hour_data["datetime"],
+                            "temperature": temp,
+                            "humidity": humidity,
+                            "conditions": conditions
+                        })
+
+                if len(temps) == 7:
+                    df = pd.DataFrame([temps], columns=[f"t-{6 - i}" for i in range(7)])
+                    df["date"] = date
+                    df.to_csv("ml_dataset.csv", mode='a', header=not os.path.exists("ml_dataset.csv"), index=False)
 
 
-        try:
-            response = requests.get(url)
-            response.raise_for_status()
-            data = response.json()
-
-            hours = data["days"][0]["hours"]
-            target=[
-                f"{(current_Hour - 5):02d}:00:00",
-                f"{(current_Hour - 4):02d}:00:00",
-                f"{(current_Hour - 3):02d}:00:00",
-                f"{(current_Hour - 2):02d}:00:00",
-                f"{(current_Hour - 1):02d}:00:00",
-                f"{current_Hour}:00:00"
-            ]
-            results=[]
-
-            for hours_data in hours:
-                if hours_data["datetime"] in target:
-                    hoursData= hours_data
-                    temp = hours_data .get("temp", "brak")
-                    humidity = hours_data  .get("humidity", "brak")
-                    conditions = hours_data .get("conditions", "brak")
-                    results.append(f"{hoursData} - Temp: {temp}°C, Wilgotność: {humidity}%, Warunki: {conditions}")
-
+            except requests.exceptions.RequestException as e:
+                print(f"Nie udało się pobrać danych dla {date}: {e}")
             with open("weather_data.txt", "w") as f:
-                for result in results:
-                    f.write(result + "\n")
+                for data in weather_data:
+                    f.write(
+                        f"{data['date']} {data['time']} - Temp: {data['temperature']}°C, Wilgotność: {data['humidity']}%, Warunki: {data['conditions']}\n")
 
-        except requests.exceptions.RequestException as e:
-            messagebox.showerror(e)
+        self.generate()
+
+        if len(temps) > 6 and Path("model.pkl").exists():
+            with open("model.pkl", "rb") as f:
+                model = pickle.load(f)
+
+            df = pd.DataFrame([temps], columns=["t-6", "t-5", "t-4", "t-3", "t-2", "t-1", "t"])
+            prediction = model.predict(df)[0]
+            messagebox.showinfo("Prognoza AI", f"Prognozowana temperatura za godzinę: {((prediction - 32) / 1.8):.1f}°C")
+
+        elif not Path("model.pkl").exists():
+            messagebox.showwarning("AI", "Brak modelu AI. Wytrenuj najpierw model (plik model.pkl).")
+        else:
+            messagebox.showwarning("AI", "Brak wystarczających danych pogodowych do prognozy.")
 
 
     def create_widgets(self):
