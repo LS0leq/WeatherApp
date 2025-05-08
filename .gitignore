@@ -1,0 +1,6 @@
+.env
+__pycache__/
+*.pyc
+weather_data.txt
+favorites.txt
+ml_dataset.csv

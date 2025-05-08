@@ -6,15 +6,19 @@ import requests
 from datetime import datetime, timedelta
 import pandas as pd
 import re
+from dotenv import load_dotenv
+
 
 import trainAi
 
+load_dotenv()
 
 class CarbonApp:
     def __init__(self, root):
         self.root = root
         self.root.title("Wybierz województwo i miasto")
         self.root.geometry("500x400")
+        self.check_api_keys()
 
         self.selected_state = tk.StringVar()
         self.selected_city = tk.StringVar()
@@ -57,6 +61,26 @@ class CarbonApp:
         self.create_widgets()
         self.update_favorites_listbox()
         self.favorites_listbox.bind("<Double-Button-1>", self.selected_favorite)
+
+    def check_api_keys(self):
+        """Sprawdź czy klucze API są dostępne"""
+        required_keys = {
+            'VISUALCROSSING_API_KEY': 'Visual Crossing Weather',
+            'AIRVISUAL_API_KEY': 'AirVisual'
+        }
+
+        missing_keys = []
+        for key, service in required_keys.items():
+            if not os.getenv(key):
+                missing_keys.append(service)
+
+        if missing_keys:
+            messagebox.showerror(
+                "Błąd konfiguracji",
+                f"Brak kluczy API dla następujących serwisów: {', '.join(missing_keys)}\n"
+                "Sprawdź plik .env"
+            )
+            self.root.destroy()
 
     def save_to_file(self):
         with open("favorites.txt", "w") as f:
@@ -114,8 +138,8 @@ class CarbonApp:
         now = datetime.now()
         current_Hour = int(now.strftime("%H"))
         weather_data = []
-        # api_key = "J9GRDM7ZWDRAPYKUF2DFYNMVQ"
-        api_key = "58RVWERZ4EM2MGCNDS9JDGXQL"
+        api_key = os.getenv('VISUALCROSSING_API_KEY')
+
 
         if not city:
             messagebox.showerror("Błąd", "Proszę wybrać miasto.")
@@ -281,6 +305,8 @@ class CarbonApp:
     def fetch_data(self):
         city = self.selected_city.get()
         state = self.selected_state.get()
+        api_key = os.getenv('AIRVISUAL_API_KEY')
+
         if not city or not state:
             messagebox.showerror("Błąd", "Proszę wybrać województwo i miasto.")
             return
@@ -289,7 +315,7 @@ class CarbonApp:
         if city == "Warszawa":
             city = "Warsaw"
 
-        api_url = f"http://api.airvisual.com/v2/city?city={city}&state={state_code}&country=POLAND&key=102d3598-ce56-4825-a71b-60d520a6535e"
+        api_url = f"http://api.airvisual.com/v2/city?city={city}&state={state_code}&country=POLAND&key={api_key}"
 
         try:
             response = requests.get(api_url)
