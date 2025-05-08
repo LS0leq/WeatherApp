@@ -1,10 +1,13 @@
 import os
+import subprocess
 import tkinter as tk
 from tkinter import ttk, messagebox
 import requests
 from datetime import datetime, timedelta
 import pandas as pd
 import re
+
+import trainAi
 
 
 class CarbonApp:
@@ -47,6 +50,7 @@ class CarbonApp:
             "Warmińsko Mazurskie": "Warmia-Masuria",
             "Zachodnio Pomorskie": "West%Pomerania"
         }
+        self.aiPred = "Prognoza AI: brak danych"
 
         self.favorite_locations = []
         self.open_from_file()
@@ -80,14 +84,16 @@ class CarbonApp:
 
             rows = []
             for i in range(len(temperatures) - 6):
-                row = temperatures[i:i + 7]
+                row = temperatures[i:i + 8]
                 rows.append(row)
 
-            columns = ['t-6','t-5', 't-4', 't-3', 't-2', 't-1', 't']
+            columns = ['t-6','t-5', 't-4', 't-3', 't-2', 't-1', 't', 't+1']
             df = pd.DataFrame(rows, columns=columns)
 
             df.to_csv("ml_dataset.csv", index=False)
             print("Zapisano dane do ml_dataset.csv")
+
+
 
         except Exception as e:
             messagebox.showerror("Błąd", f"Wystąpił błąd przy generowaniu datasetu: {str(e)}")
@@ -106,16 +112,16 @@ class CarbonApp:
 
         city = self.selected_city.get()
         now = datetime.now()
-        date = now.strftime("%Y-%m-%d")
         current_Hour = int(now.strftime("%H"))
         weather_data = []
-        api_key = "J9GRDM7ZWDRAPYKUF2DFYNMVQ"
+        # api_key = "J9GRDM7ZWDRAPYKUF2DFYNMVQ"
+        api_key = "58RVWERZ4EM2MGCNDS9JDGXQL"
 
         if not city:
             messagebox.showerror("Błąd", "Proszę wybrać miasto.")
             return
 
-        for day_offset in range(20):
+        for day_offset in range(3):
             date = (datetime.now() - timedelta(days=day_offset)).strftime("%Y-%m-%d")
             url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{city}/{date}?key={api_key}&include=hours"
 
@@ -165,18 +171,29 @@ class CarbonApp:
 
         self.generate()
 
-        if len(temps) > 6 and Path("model.pkl").exists():
-            with open("model.pkl", "rb") as f:
-                model = pickle.load(f)
+        try:
+            subprocess.run(['python', 'trainAI.py'], check=True)
+            print("Model został wytrenowany pomyślnie")
+            if len(temps) > 6 and Path("model.pkl").exists():
+                with open("model.pkl", "rb") as f:
+                    model = pickle.load(f)
 
-            df = pd.DataFrame([temps], columns=["t-6", "t-5", "t-4", "t-3", "t-2", "t-1", "t"])
-            prediction = model.predict(df)[0]
-            messagebox.showinfo("Prognoza AI", f"Prognozowana temperatura za godzinę: {((prediction - 32) / 1.8):.1f}°C")
+                df = pd.DataFrame([temps], columns=["t-6", "t-5", "t-4", "t-3", "t-2", "t-1", "t"])
+                prediction = model.predict(df)[0]
+                # messagebox.showinfo("Prognoza AI",
+                #                     f"Prognozowana temperatura za godzinę: {((prediction - 32) / 1.8):.1f}°C")
+                self.aiPred = f"Prognozowana temperatura za godzinę: {((prediction - 32) / 1.8):.1f}°C"
+                self.ai.config(text=self.aiPred)
 
-        elif not Path("model.pkl").exists():
-            messagebox.showwarning("AI", "Brak modelu AI. Wytrenuj najpierw model (plik model.pkl).")
-        else:
-            messagebox.showwarning("AI", "Brak wystarczających danych pogodowych do prognozy.")
+            elif not Path("model.pkl").exists():
+                messagebox.showwarning("AI", "Brak modelu AI. Wytrenuj najpierw model (plik model.pkl).")
+            else:
+                messagebox.showwarning("AI", "Brak wystarczających danych pogodowych do prognozy.")
+        except subprocess.CalledProcessError as e:
+            print(f"Błąd podczas trenowania modelu: {e}")
+            messagebox.showerror("Błąd", f"Wystąpił błąd podczas trenowania modelu: {e}")
+
+
 
 
     def create_widgets(self):
@@ -214,6 +231,8 @@ class CarbonApp:
         self.forecast_button.pack()
         self.update_favorites_listbox()
         self.favorites_listbox.bind("<Double-1>", self.selected_favorite)
+        self.ai = tk.Label(self.root, text=self.aiPred)
+        self.ai.pack()
 
     def on_state_selected(self, event):
         selected_state = self.selected_state.get()

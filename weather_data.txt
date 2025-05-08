@@ -1,0 +1,21 @@
+2025-05-08 09:00:00 - Temp: 42.7°C, Wilgotnoœæ: 60.8%, Warunki: Partially cloudy
+2025-05-08 10:00:00 - Temp: 42.7°C, Wilgotnoœæ: 60.8%, Warunki: Partially cloudy
+2025-05-08 11:00:00 - Temp: 42.7°C, Wilgotnoœæ: 60.8%, Warunki: Partially cloudy
+2025-05-08 12:00:00 - Temp: 44.5°C, Wilgotnoœæ: 52.73%, Warunki: Partially cloudy
+2025-05-08 13:00:00 - Temp: 44.5°C, Wilgotnoœæ: 52.73%, Warunki: Partially cloudy
+2025-05-08 14:00:00 - Temp: 48.1°C, Wilgotnoœæ: 47.75%, Warunki: Partially cloudy
+2025-05-08 15:00:00 - Temp: 48.5°C, Wilgotnoœæ: 49.96%, Warunki: Clear
+2025-05-07 09:00:00 - Temp: 44.5°C, Wilgotnoœæ: 52.73%, Warunki: Partially cloudy
+2025-05-07 10:00:00 - Temp: 46.3°C, Wilgotnoœæ: 49.25%, Warunki: Partially cloudy
+2025-05-07 11:00:00 - Temp: 48.1°C, Wilgotnoœæ: 49.54%, Warunki: Partially cloudy
+2025-05-07 12:00:00 - Temp: 48.1°C, Wilgotnoœæ: 57.27%, Warunki: Partially cloudy
+2025-05-07 13:00:00 - Temp: 46.3°C, Wilgotnoœæ: 53.01%, Warunki: Partially cloudy
+2025-05-07 14:00:00 - Temp: 48.1°C, Wilgotnoœæ: 53.28%, Warunki: Partially cloudy
+2025-05-07 15:00:00 - Temp: 46.3°C, Wilgotnoœæ: 53.01%, Warunki: Partially cloudy
+2025-05-06 09:00:00 - Temp: 48.1°C, Wilgotnoœæ: 39.67%, Warunki: Partially cloudy
+2025-05-06 10:00:00 - Temp: 49.9°C, Wilgotnoœæ: 37.09%, Warunki: Partially cloudy
+2025-05-06 11:00:00 - Temp: 51.7°C, Wilgotnoœæ: 32.18%, Warunki: Partially cloudy
+2025-05-06 12:00:00 - Temp: 51.7°C, Wilgotnoœæ: 32.18%, Warunki: Partially cloudy
+2025-05-06 13:00:00 - Temp: 53.5°C, Wilgotnoœæ: 34.99%, Warunki: Overcast
+2025-05-06 14:00:00 - Temp: 55.3°C, Wilgotnoœæ: 37.98%, Warunki: Overcast
+2025-05-06 15:00:00 - Temp: 53.5°C, Wilgotnoœæ: 43.62%, Warunki: Partially cloudy
