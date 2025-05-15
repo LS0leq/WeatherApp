@@ -1,0 +1,14 @@
+2025-05-15 16:00:00 - Temp: 49.9°C, Wilgotność: 57.53%, Warunki: Rain, Partially cloudy
+2025-05-15 17:00:00 - Temp: 48.1°C, Wilgotność: 66.06%, Warunki: Rain, Partially cloudy
+2025-05-15 18:00:00 - Temp: 48.1°C, Wilgotność: 70.88%, Warunki: Partially cloudy
+2025-05-15 19:00:00 - Temp: 49.9°C, Wilgotność: 53.55%, Warunki: Partially cloudy
+2025-05-15 20:00:00 - Temp: 48.1°C, Wilgotność: 61.53%, Warunki: Partially cloudy
+2025-05-15 21:00:00 - Temp: 45.2°C, Wilgotność: 79.02%, Warunki: Rain, Overcast
+2025-05-15 22:00:00 - Temp: 44.7°C, Wilgotność: 84.12%, Warunki: Rain, Overcast
+2025-05-14 16:00:00 - Temp: 67.9°C, Wilgotność: 42.87%, Warunki: Rain, Partially cloudy
+2025-05-14 17:00:00 - Temp: 66.1°C, Wilgotność: 42.59%, Warunki: Rain, Partially cloudy
+2025-05-14 18:00:00 - Temp: 62.5°C, Wilgotność: 51.73%, Warunki: Rain, Partially cloudy
+2025-05-14 19:00:00 - Temp: 48.1°C, Wilgotność: 81.48%, Warunki: Rain, Partially cloudy
+2025-05-14 20:00:00 - Temp: 46.3°C, Wilgotność: 75.85%, Warunki: Rain, Overcast
+2025-05-14 21:00:00 - Temp: 44.5°C, Wilgotność: 75.68%, Warunki: Partially cloudy
+2025-05-14 22:00:00 - Temp: 42.7°C, Wilgotność: 81.07%, Warunki: Partially cloudy

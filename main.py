@@ -11,16 +11,19 @@ class MainApp(tk.Tk):
 
         # Strony aplikacji
         self.frames = {}
-        for F in (CarbonApp, PollutionMapPage):
-            page_name = F.__name__
-            frame = F(self, self)
-            self.frames[page_name] = frame
-            frame.grid(row=0, column=0, sticky="nsew")
+        self.frames = {}
+
+        carbon_frame = CarbonApp(self,self)
+        self.frames["CarbonApp"] = carbon_frame
+        carbon_frame.pack(fill="both", expand=True)
+
+        pollution_frame = PollutionMapPage(self, self)
+        self.frames["PollutionMapPage"] = pollution_frame
+        pollution_frame.pack(fill="both", expand=True)
 
         self.show_frame("CarbonApp")
 
     def show_frame(self, page_name):
-        """ Przełączanie między stronami aplikacji """
         frame = self.frames[page_name]
         frame.tkraise()
 
