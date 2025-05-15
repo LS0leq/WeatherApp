@@ -137,9 +137,8 @@ class CarbonApp(tk.Frame):
         tk.Button(self, text="Sprawdź pogodę", command=self.fetch_data, font=('Arial', 14, 'bold'),
                   bg='#4682B4', fg='white').pack(pady=10)
 
-        # UI: Label do wyświetlania wyników
+        # UI: Label do wyświetlania wyników (NIE pakujemy na starcie!)
         self.result_label = tk.Label(self, text="", bg='#FFFFFF', font=('Arial', 14), wraplength=350)
-        self.result_label.pack(pady=5)
 
         # UI: Przycisk do zapisywania ulubionej lokalizacji
         tk.Button(self, text="Zapisz lokalizację", command=self.save_favorite_location, font=('Arial', 12, 'bold'),
@@ -153,8 +152,9 @@ class CarbonApp(tk.Frame):
         self.fav_locations_combobox.pack(pady=5)
 
         # UI: Przycisk do przejścia do mapy pogodowej
-        tk.Button(self, text="Mapa pogodowa", command=self.show_weather_map, font=('Arial', 12, 'bold'),
-                  bg='#32CD32', fg='white').pack(pady=5)
+        self.weather_map_button = tk.Button(self, text="Mapa pogodowa", command=self.show_weather_map, font=('Arial', 12, 'bold'),
+                                            bg='#32CD32', fg='white')
+        self.weather_map_button.pack(pady=5)
 
         # UI: Przycisk do usuwania lokalizacji
         tk.Button(self, text="Usuń lokalizację", command=self.delete_favorite_location, font=('Arial', 12, 'bold'),
@@ -264,6 +264,10 @@ class CarbonApp(tk.Frame):
                             f"Zagrożenia: {hazard_suggestion}")
 
             self.result_label.config(text=weather_info)
+            # Jeśli label nie jest już widoczny, pakujemy go NAD przyciskiem "Mapa pogodowa"
+            if not self.result_label.winfo_ismapped():
+                self.result_label.pack_forget()
+                self.result_label.pack(before=self.weather_map_button, pady=5)
 
         except requests.RequestException as e:
             messagebox.showerror("Błąd", f"Wystąpił błąd: {e}")
