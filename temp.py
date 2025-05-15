@@ -194,6 +194,7 @@ class CarbonApp:
 
 
             except requests.exceptions.RequestException as e:
+                print(f"Nie udało się pobrać danych dla {date}: {e}")
             with open("weather_data.txt", "w") as f:
                 for data in weather_data:
                     f.write(
@@ -203,6 +204,7 @@ class CarbonApp:
 
         try:
             subprocess.run([sys.executable, 'trainAI.py'], check=True)
+            print("Model został wytrenowany pomyślnie")
             if len(temps) > 6 and Path("model.pkl").exists():
                 with open("model.pkl", "rb") as f:
                     model = pickle.load(f)
