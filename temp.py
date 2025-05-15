@@ -7,9 +7,9 @@ from datetime import datetime, timedelta
 import pandas as pd
 import re
 from dotenv import load_dotenv
+from urllib.parse import quote
 
 
-import trainAi
 
 load_dotenv()
 
@@ -83,7 +83,7 @@ class CarbonApp:
             self.root.destroy()
 
     def save_to_file(self):
-        with open("favorites.txt", "w") as f:
+        with open("favorites.txt", "w", encoding="utf-8") as f:
             f.write("\n".join(self.favorite_locations))
 
     def generate(self):
@@ -124,8 +124,17 @@ class CarbonApp:
 
     def open_from_file(self):
         try:
-            with open("favorites.txt") as f:
-                self.favorite_locations = f.read().splitlines()
+            try:
+                with open("favorites.txt", encoding='utf-8') as f:
+                    self.favorite_locations = f.read().splitlines()
+            except UnicodeDecodeError:
+                for encoding in ['cp1250', 'iso-8859-2', 'windows-1250']:
+                    try:
+                        with open("favorites.txt", encoding=encoding) as f:
+                            self.favorite_locations = f.read().splitlines()
+                        break
+                    except UnicodeDecodeError:
+                        continue
         except FileNotFoundError:
             self.favorite_locations = []
 
@@ -133,7 +142,7 @@ class CarbonApp:
         import pickle
         import pandas as pd
         from pathlib import Path
-
+        import sys
         city = self.selected_city.get()
         now = datetime.now()
         current_Hour = int(now.strftime("%H"))
@@ -148,7 +157,8 @@ class CarbonApp:
         for day_offset in range(3):
             date = (datetime.now() - timedelta(days=day_offset)).strftime("%Y-%m-%d")
             url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{city}/{date}?key={api_key}&include=hours"
-
+            print(url)
+            print(city)
             try:
                 response = requests.get(url)
                 response.raise_for_status()
@@ -196,7 +206,7 @@ class CarbonApp:
         self.generate()
 
         try:
-            subprocess.run(['python', 'trainAI.py'], check=True)
+            subprocess.run([sys.executable, 'trainAI.py'], check=True)
             print("Model został wytrenowany pomyślnie")
             if len(temps) > 6 and Path("model.pkl").exists():
                 with open("model.pkl", "rb") as f:
@@ -204,8 +214,7 @@ class CarbonApp:
 
                 df = pd.DataFrame([temps], columns=["t-6", "t-5", "t-4", "t-3", "t-2", "t-1", "t"])
                 prediction = model.predict(df)[0]
-                # messagebox.showinfo("Prognoza AI",
-                #                     f"Prognozowana temperatura za godzinę: {((prediction - 32) / 1.8):.1f}°C")
+
                 self.aiPred = f"Prognozowana temperatura za godzinę: {((prediction - 32) / 1.8):.1f}°C"
                 self.ai.config(text=self.aiPred)
 
@@ -266,10 +275,10 @@ class CarbonApp:
 
     def add_favorite(self):
         state = self.selected_state.get()
-        city = self.selected_city.get()
+        city = quote(self.selected_city.get())
 
         try:
-            with open("favorites.txt") as f:
+            with open("favorites.txt", encoding="utf-8") as f:
                 self.favorite_locations = f.read().splitlines()
         except FileNotFoundError:
             self.favorite_locations = []
