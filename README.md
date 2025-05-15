@@ -100,12 +100,12 @@ Naszym celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostęp
 ⏳ Możliwość zapisu ulubionych lokalizacji.  
 ⏳ Implementacja rekomendacji (np. "Zabierz parasol", "Dobra pogoda na rower").  
 
-## **📌 IV. Optymalizacja i testy (kwiecień)**  
+## **📌 IV. Optymalizacja i testy (koniec maja)**  
 ⏳ Wprowadzenie poprawek na podstawie testów.  
 ⏳ Optymalizacja kodu – poprawienie wydajności.  
 ⏳ Testy użytkowników – zbieranie opinii i zgłaszanie błędów.  
 
-## **📌 V. Finalizacja wersji komputerowej (okolice maja)**  
+## **📌 V. Finalizacja wersji komputerowej (okolice czerwca)**  
 ⏳ Poprawki UI/UX – dopracowanie interfejsu użytkownika.  
 ⏳ Stworzenie finalnej dokumentacji technicznej.  
 ⏳ Przygotowanie prezentacji i omówienie projektu.  
