@@ -115,7 +115,6 @@ class CarbonApp:
             df = pd.DataFrame(rows, columns=columns)
 
             df.to_csv("ml_dataset.csv", index=False)
-            print("Zapisano dane do ml_dataset.csv")
 
 
 
@@ -157,8 +156,6 @@ class CarbonApp:
         for day_offset in range(3):
             date = (datetime.now() - timedelta(days=day_offset)).strftime("%Y-%m-%d")
             url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{city}/{date}?key={api_key}&include=hours"
-            print(url)
-            print(city)
             try:
                 response = requests.get(url)
                 response.raise_for_status()
@@ -197,7 +194,6 @@ class CarbonApp:
 
 
             except requests.exceptions.RequestException as e:
-                print(f"Nie udało się pobrać danych dla {date}: {e}")
             with open("weather_data.txt", "w") as f:
                 for data in weather_data:
                     f.write(
@@ -207,7 +203,6 @@ class CarbonApp:
 
         try:
             subprocess.run([sys.executable, 'trainAI.py'], check=True)
-            print("Model został wytrenowany pomyślnie")
             if len(temps) > 6 and Path("model.pkl").exists():
                 with open("model.pkl", "rb") as f:
                     model = pickle.load(f)
@@ -223,7 +218,6 @@ class CarbonApp:
             else:
                 messagebox.showwarning("AI", "Brak wystarczających danych pogodowych do prognozy.")
         except subprocess.CalledProcessError as e:
-            print(f"Błąd podczas trenowania modelu: {e}")
             messagebox.showerror("Błąd", f"Wystąpił błąd podczas trenowania modelu: {e}")
 
 
