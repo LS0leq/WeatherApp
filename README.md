@@ -100,12 +100,12 @@ Naszym celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostęp
 ⏳ Możliwość zapisu ulubionych lokalizacji.  
 ⏳ Implementacja rekomendacji (np. "Zabierz parasol", "Dobra pogoda na rower").  
 
-## **📌 IV. Optymalizacja i testy (koniec maja)**  
+## **📌 IV. Optymalizacja i testy (kwiecień)**  
 ⏳ Wprowadzenie poprawek na podstawie testów.  
 ⏳ Optymalizacja kodu – poprawienie wydajności.  
 ⏳ Testy użytkowników – zbieranie opinii i zgłaszanie błędów.  
 
-## **📌 V. Finalizacja wersji komputerowej (okolice czerwca)**  
+## **📌 V. Finalizacja wersji komputerowej (okolice maja)**  
 ⏳ Poprawki UI/UX – dopracowanie interfejsu użytkownika.  
 ⏳ Stworzenie finalnej dokumentacji technicznej.  
 ⏳ Przygotowanie prezentacji i omówienie projektu.  
@@ -118,10 +118,10 @@ Naszym celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostęp
 ---
 
 
-## 📅 **Harmonogram prac (stan na 07.03.2025):**
-✅ **Zapoznanie z projektem**, dobór ról oraz przygotowanie tasków do konkretnych osób.
+## 📅 **Harmonogram prac (stan na 18.05.2025):**
+✅ **Ukończenie głównej części projektu**, stworzenie formalarza i mapy pogodowej.
 
-⏳ **Praca nad projektem**, zarządzanie kodem, współpraca między rolami.
+⏳ **Praca nad AI**, stworzenie przewidywania pogody.
 
 ⏳ **Testowanie kodu** oraz weryfikacja jego jakości – poprawki oraz finalizacja.
 
