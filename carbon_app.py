@@ -1,76 +1,18 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
-import requests
-import json
-
-# Ścieżka do pliku z ulubionymi lokalizacjami
-FILENAME = "favorite_locations.json"
-
-
-# Funkcja, która zwraca sugestie dotyczące ubioru na podstawie temperatury
-def get_outfit_suggestion(temperature):
-    if temperature <= 0:
-        return "Ciepły płaszcz, szalik, czapka, rękawiczki."
-    elif 0 < temperature <= 10:
-        return "Kurtka zimowa lub ciepły sweter."
-    elif 10 < temperature <= 20:
-        return "Lekka kurtka lub bluza."
-    elif 20 < temperature <= 30:
-        return "T-shirt, lekka odzież."
-    else:
-        return "Woda, krem z filtrem, lekkie ubrania."
-
-
-# Funkcja, która zwraca sugestie dotyczące aktywności na świeżym powietrzu
-def get_activity_suggestion(temperature, wind_speed):
-    if temperature <= 0:
-        return "Zaleca się unikanie długich spacerów na zewnątrz. Możesz rozważyć aktywności w zamkniętych pomieszczeniach."
-    elif 0 < temperature <= 10:
-        if wind_speed > 20:
-            return "Zaleca się krótki spacer, ale ubierz się ciepło, aby uniknąć wychłodzenia."
-        return "Idealna pogoda na spacer lub krótki bieg."
-    elif 10 < temperature <= 20:
-        if wind_speed > 20:
-            return "Możesz uprawiać różne aktywności na świeżym powietrzu, ale bądź przygotowany na silny wiatr."
-        return "Idealna pogoda na spacer, jogging lub jazdę na rowerze."
-    elif 20 < temperature <= 30:
-        return "Idealna pogoda na aktywności na świeżym powietrzu: spacer, jogging, rower."
-    else:
-        return "Możesz uprawiać aktywności na świeżym powietrzu, ale pamiętaj o odpowiedniej ochronie przed słońcem."
-
-
-# Funkcja, która zwraca sugestie dotyczące zagrożeń związanych z pogodą
-def get_hazard_suggestion(temperature, humidity, wind_speed):
-    if temperature <= 0:
-        return "Zimno, możliwe oblodzenia. Uważaj na śliskie drogi."
-    elif 0 < temperature <= 10:
-        return "Chłodno, możliwe przymrozki. Uważaj na wypadki na drodze."
-    elif 10 < temperature <= 20:
-        if wind_speed > 20:
-            return "Wiatr może być silny, bądź ostrożny na zewnątrz."
-        return "Brak zagrożeń. Warto korzystać z pogody."
-    elif 20 < temperature <= 30:
-        if humidity > 70:
-            return "Wysoka wilgotność może powodować dyskomfort. Pamiętaj o nawadnianiu organizmu."
-        return "Brak zagrożeń. Ciesz się pogodą!"
-    else:
-        return "Wysokie temperatury. Pamiętaj o ochronie przed słońcem."
-
+from tkinter import Frame, Label, Button, ttk, messagebox
+import requests, os
 
 class CarbonApp(tk.Frame):
     def __init__(self, parent, controller):
         super().__init__(parent)
         self.controller = controller
-        self.configure(bg='#ADD8E6')
+        self.configure(bg='#ADD8E6')  # Początkowe ustawienie tła na jasny niebieski
+        self.controller = controller
+        self.controller.current_theme = "light"
+        self.selected_state = tk.StringVar()  # Zmienna do przechowywania wybranego województwa
+        self.selected_city = tk.StringVar()  # Zmienna do przechowywania wybranego miasta
 
-        # Zmienna do przechowywania wybranego województwa i miasta
-        self.selected_state = tk.StringVar()
-        self.selected_city = tk.StringVar()
-
-        # Wczytanie zapisanych ulubionych lokalizacji z pliku
-        self.favorite_locations = self.load_favorite_locations()
-
-        # Lista dostępnych województw i miast
+        # Lista województw i miast
         self.countries_and_cities = [
             {"country": "Polska", "state": "Pomorskie",
              "cities": ["Bytów", "Gdańsk", "Gdynia", "Kościerzyna", "Pogórze", "Sopot"]},
@@ -121,107 +63,113 @@ class CarbonApp(tk.Frame):
             "Zachodnio Pomorskie": "West%Pomerania"
         }
 
-        # UI: Etykieta i combobox dla województwa
-        tk.Label(self, text="Województwo:", bg='#87CEEB', font=('Arial', 14, 'bold')).pack(pady=5)
-        self.state_combobox = ttk.Combobox(self, textvariable=self.selected_state, font=('Arial', 12))
-        self.state_combobox['values'] = [item['state'] for item in self.countries_and_cities]
-        self.state_combobox.bind("<<ComboboxSelected>>", self.on_state_selected)
+        # Lista ulubionych lokalizacji
+        self.favorites = []
+
+        def toggle_theme(self):
+            """ Funkcja zmieniająca motyw na przeciwny """
+            if self.controller.current_theme == "dark":
+                self.controller.current_theme = "light"
+            else:
+                self.controller.current_theme = "dark"
+            self.controller.set_theme(self.controller.current_theme)
+
+        def set_theme(self, theme):
+            """ Funkcja ustawiająca motyw aplikacji """
+            bg_color = '#333333' if theme == "dark" else '#ADD8E6'
+            fg_color = '#FFFFFF' if theme == "dark" else '#000000'
+            widget_bg_color = '#444444' if theme == "dark" else '#FFFFFF'
+
+            self.configure(bg=bg_color)  # Ustawienie tła aplikacji
+            for widget in self.winfo_children():
+                if isinstance(widget, tk.Frame):
+                    widget.configure(bg=bg_color)
+                elif isinstance(widget, tk.Label):
+                    widget.configure(bg=widget_bg_color, fg=fg_color)
+                elif isinstance(widget, tk.Button):
+                    widget.configure(bg=widget_bg_color, fg=fg_color)
+                elif isinstance(widget, ttk.Combobox):
+                    widget.configure(background=widget_bg_color, foreground=fg_color)
+
+            self.result_frame.config(bg=widget_bg_color, bd=2, relief="solid", padx=10, pady=10)
+            self.result_label.config(bg=widget_bg_color, fg=fg_color)
+            self.clothing_advice_label.config(bg=widget_bg_color, fg=fg_color)
+
+        # Główny kontener aplikacji (ramka), która będzie zawierała wszystkie elementy
+        main_frame = tk.Frame(self, bg='#ADD8E6')
+        main_frame.pack(expand=True, fill="both", anchor="center")
+
+        # Wyświetlanie etykiety dla województwa
+        tk.Label(main_frame, text="Województwo:", bg='#87CEEB', font=('Arial', 14, 'bold')).pack(pady=5)
+
+        # Combobox do wyboru województwa
+        self.state_combobox = ttk.Combobox(main_frame, textvariable=self.selected_state, font=('Arial', 12))
+        self.state_combobox['values'] = [item['state'] for item in self.countries_and_cities]  # Lista województw
+        self.state_combobox.bind("<<ComboboxSelected>>",
+                                 self.on_state_selected)  # Po wybraniu województwa, aktualizuje miasta
         self.state_combobox.pack(pady=5)
 
-        # UI: Etykieta i combobox dla miasta
-        tk.Label(self, text="Miasto:", bg='#87CEEB', font=('Arial', 14, 'bold')).pack(pady=5)
-        self.city_combobox = ttk.Combobox(self, textvariable=self.selected_city, font=('Arial', 12))
+        # Wyświetlanie etykiety dla miasta
+        tk.Label(main_frame, text="Miasto:", bg='#87CEEB', font=('Arial', 14, 'bold')).pack(pady=5)
+
+        # Combobox do wyboru miasta
+        self.city_combobox = ttk.Combobox(main_frame, textvariable=self.selected_city, font=('Arial', 12))
         self.city_combobox.pack(pady=5)
 
-        # UI: Przycisk do sprawdzania pogody
-        tk.Button(self, text="Sprawdź pogodę", command=self.fetch_data, font=('Arial', 14, 'bold'),
-                  bg='#4682B4', fg='white').pack(pady=10)
-
-        # UI: Label do wyświetlania wyników
-        self.result_label = tk.Label(self, text="", bg='#FFFFFF', font=('Arial', 14), wraplength=350)
-        self.result_label.pack(pady=5)
-
-        # UI: Przycisk do zapisywania ulubionej lokalizacji
-        tk.Button(self, text="Zapisz lokalizację", command=self.save_favorite_location, font=('Arial', 12, 'bold'),
+        # Przycisk do dodania wybranego miasta do ulubionych
+        tk.Button(main_frame, text="Dodaj do ulubionych", command=self.add_to_favorites, font=('Arial', 12, 'bold'),
                   bg='#4682B4', fg='white').pack(pady=5)
 
-        # UI: Etykieta i combobox dla ulubionych lokalizacji
-        tk.Label(self, text="Ulubione lokalizacje:", bg='#87CEEB', font=('Arial', 14, 'bold')).pack(pady=5)
-        self.fav_locations_combobox = ttk.Combobox(self, font=('Arial', 12))
-        self.fav_locations_combobox['values'] = [f"{loc['state']}, {loc['city']}" for loc in self.favorite_locations]
-        self.fav_locations_combobox.bind("<<ComboboxSelected>>", self.on_favorite_selected)
-        self.fav_locations_combobox.pack(pady=5)
+        # Etykieta dla ulubionych lokalizacji
+        tk.Label(main_frame, text="Ulubione lokalizacje:", bg='#87CEEB', font=('Arial', 14, 'bold')).pack(pady=5)
 
-        # UI: Przycisk do przejścia do mapy pogodowej
-        tk.Button(self, text="Mapa pogodowa", command=self.show_weather_map, font=('Arial', 12, 'bold'),
-                  bg='#32CD32', fg='white').pack(pady=5)
+        # Combobox do wybrania ulubionej lokalizacji
+        self.favorites_combobox = ttk.Combobox(main_frame, font=('Arial', 12))
+        self.favorites_combobox['values'] = self.favorites  # Lista ulubionych miast
+        self.favorites_combobox.bind("<<ComboboxSelected>>",
+                                     self.on_favorite_selected)  # Po wybraniu lokalizacji, automatycznie pobiera dane
+        self.favorites_combobox.pack(pady=5)
 
-        # UI: Przycisk do usuwania lokalizacji
-        tk.Button(self, text="Usuń lokalizację", command=self.delete_favorite_location, font=('Arial', 12, 'bold'),
-                  bg='#FF6347', fg='white').pack(pady=5)
-        self.theme_button = tk.Button(self, text="Przełącz motyw", command=self.toggle_theme,
-                                      font=('Arial', 12, 'bold'),
-                                      bg='#FFD700', fg='black')
-        self.theme_button.pack(pady=5)
+        # Przycisk do usunięcia wybranego miasta z ulubionych
+        tk.Button(main_frame, text="Usuń z ulubionych", command=self.remove_from_favorites, font=('Arial', 12, 'bold'),
+                  bg='#4682B4', fg='white').pack(pady=5)
 
-    # Funkcja do przejścia do strony z mapą pogodową
-    def show_weather_map(self):
-        self.controller.show_frame("PollutionMapPage")
+        # Przycisk do zmiany motywu
+        self.theme_button = tk.Button(main_frame, text="Zmień motyw", command=self.toggle_theme,
+                                      font=('Arial', 12, 'bold'), bg='#4682B4', fg='white')
+        self.theme_button.pack(pady=10)
+
+        # Przycisk do sprawdzenia jakości powietrza i pogody
+        self.weather_button = tk.Button(main_frame, text="Sprawdź jakość powietrza", command=self.fetch_data,
+                                        font=('Arial', 14, 'bold'), bg='#4682B4', fg='white')
+        self.weather_button.pack(pady=10)
+
+        # Ramka na wyniki (pogoda i jakość powietrza), początkowo ukryta
+        self.result_frame = tk.Frame(main_frame, bg='#FFFFFF', bd=2, relief="solid", padx=10, pady=10)
+        self.result_frame.pack_forget()  # Ukrycie ramki na początku
+
+        # Etykieta do wyświetlania wyników pogody i jakości powietrza
+        self.result_label = tk.Label(self.result_frame, text="", bg='#FFFFFF', font=('Arial', 14), wraplength=350)
+        self.result_label.pack(pady=5)
+
+        # Etykieta do wyświetlania zaleceń dotyczących odzieży
+        self.clothing_advice_label = tk.Label(self.result_frame, text="", bg='#FFFFFF', font=('Arial', 12),
+                                              wraplength=350)
+        self.clothing_advice_label.pack(pady=5)
+
+        # Przycisk do przejścia do mapy zanieczyszczeń (przeniesienie do innej strony)
+        tk.Button(main_frame, text="Mapa Zanieczyszczeń", font=('Arial', 12, 'bold'),
+                  command=lambda: controller.show_frame("PollutionMapPage"), bg='#4682B4', fg='white').pack(pady=10)
 
     def toggle_theme(self):
-        current_bg = self.cget('bg')
-        if current_bg == '#ADD8E6':  # Jeśli motyw jest jasny
-            self.configure(bg='#2E2E2E')  # Zmieniamy tło na ciemne
-            self.result_label.configure(bg='#2E2E2E', fg='white')  # Tło wyników na ciemne, tekst na biały
-            self.state_combobox.configure(bg='#2E2E2E', fg='white')  # Zmiana koloru comboboxów
-            self.city_combobox.configure(bg='#2E2E2E', fg='white')
-            self.fav_locations_combobox.configure(bg='#2E2E2E', fg='white')
-            # Inne elementy UI zmieniające kolor
-            for widget in self.winfo_children():
-                if isinstance(widget, tk.Button):
-                    widget.configure(bg='#333333', fg='white')
-        else:  # Jeśli motyw jest ciemny
-            self.configure(bg='#ADD8E6')  # Zmieniamy tło na jasne
-            self.result_label.configure(bg='#FFFFFF', fg='black')  # Tło wyników na jasne, tekst na czarny
-            self.state_combobox.configure(bg='#FFFFFF', fg='black')  # Zmiana koloru comboboxów
-            self.city_combobox.configure(bg='#FFFFFF', fg='black')
-            self.fav_locations_combobox.configure(bg='#FFFFFF', fg='black')
-            # Inne elementy UI zmieniające kolor
-            for widget in self.winfo_children():
-                if isinstance(widget, tk.Button):
-                    widget.configure(bg='#4682B4', fg='white')
-
-    # Funkcja do usuwania wybranej lokalizacji z ulubionych
-    def delete_favorite_location(self):
-        selected_location = self.fav_locations_combobox.get()
-
-        if selected_location:
-            # Rozdzielamy stan i miasto z wybranej lokalizacji
-            state, city = selected_location.split(", ")
-            # Usuwamy wybraną lokalizację z listy
-            self.favorite_locations = [loc for loc in self.favorite_locations if
-                                       not (loc['state'] == state and loc['city'] == city)]
-
-            # Zapisujemy zaktualizowaną listę lokalizacji do pliku
-            with open(FILENAME, "w") as file:
-                json.dump(self.favorite_locations, file)
-
-            # Aktualizujemy Combobox z ulubionymi lokalizacjami
-            self.fav_locations_combobox['values'] = [f"{loc['state']}, {loc['city']}" for loc in
-                                                     self.favorite_locations]
-            messagebox.showinfo("Sukces", "Lokalizacja usunięta!")
-
+        """ Funkcja zmieniająca motyw na przeciwny """
+        if self.controller.current_theme == "dark":
+            self.controller.current_theme = "light"
         else:
-            messagebox.showerror("Błąd", "Proszę wybrać lokalizację do usunięcia.")
+            self.controller.current_theme = "dark"
+        self.controller.set_theme(self.controller.current_theme)
 
-    # Funkcja wywoływana przy wyborze województwa
-    def on_state_selected(self, event):
-        selected_state = self.selected_state.get()
-        cities = next((item['cities'] for item in self.countries_and_cities if item['state'] == selected_state), [])
-        self.city_combobox['values'] = cities
-        self.city_combobox.set("")
-
-    # Funkcja do pobierania i wyświetlania danych pogodowych
+    # Funkcja do pobierania danych o pogodzie i jakości powietrza
     def fetch_data(self):
         city = self.selected_city.get()
 
@@ -229,10 +177,11 @@ class CarbonApp(tk.Frame):
             messagebox.showerror("Błąd", "Proszę wybrać województwo i miasto.")
             return
 
-        api_key = "fb9e5c164b6e64b6ea40f8d266f20499"
+        api_key = "fb9e5c164b6e64b6ea40f8d266f20499"  # Klucz API do OpenWeatherMap
         geocoding_url = f"http://api.openweathermap.org/geo/1.0/direct?q={city},PL&limit=1&appid={api_key}"
 
         try:
+            # Zapytanie o dane geolokalizacyjne (szerokość i długość geograficzną)
             geo_response = requests.get(geocoding_url)
             geo_response.raise_for_status()
             geo_data = geo_response.json()
@@ -243,62 +192,125 @@ class CarbonApp(tk.Frame):
 
             lat, lon = geo_data[0]['lat'], geo_data[0]['lon']
 
-            weather_url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={api_key}&units=metric"
+            # Zapytanie o dane pogodowe
+            weather_url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={api_key}"
+            # Zapytanie o dane dotyczące jakości powietrza
+            pollution_url = f"http://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={lon}&appid={api_key}"
+
+            # Pobranie danych pogodowych
             weather_response = requests.get(weather_url)
             weather_response.raise_for_status()
             weather_data = weather_response.json()
+            temperature = round(weather_data["main"]["temp"], 1)
+            description = weather_data["weather"][0]["description"]
 
-            temperature = weather_data['main']['temp']
-            humidity = weather_data['main']['humidity']
-            wind_speed = weather_data['wind']['speed']
+            # Pobranie danych o jakości powietrza
+            pollution_response = requests.get(pollution_url)
+            pollution_response.raise_for_status()
+            pollution_data = pollution_response.json()
+            air_quality = pollution_data["list"][0]["main"]["aqi"]
 
-            outfit_suggestion = get_outfit_suggestion(temperature)
-            activity_suggestion = get_activity_suggestion(temperature, wind_speed)
-            hazard_suggestion = get_hazard_suggestion(temperature, humidity, wind_speed)
+            # Wyświetlanie danych w aplikacji
+            self.display_weather_and_air_quality(temperature, description, air_quality)
 
-            weather_info = (f"Temperatura: {temperature}°C\n"
-                            f"Wilgotność: {humidity}%\n"
-                            f"Wiatr: {wind_speed} m/s\n\n"
-                            f"Ubiór: {outfit_suggestion}\n"
-                            f"Aktywność: {activity_suggestion}\n"
-                            f"Zagrożenia: {hazard_suggestion}")
+        except requests.exceptions.RequestException as e:
+            messagebox.showerror("Błąd", f"Nie udało się pobrać danych: {e}")
 
-            self.result_label.config(text=weather_info)
+    # Funkcja do wyświetlania pogody i jakości powietrza
+    def display_weather_and_air_quality(self, temperature, description, air_quality):
+        # Wyświetlanie wyników na ekranie
+        air_quality_str = self.get_air_quality_str(air_quality)
 
-        except requests.RequestException as e:
-            messagebox.showerror("Błąd", f"Wystąpił błąd: {e}")
+        # Podpowiedź odzieżowa
+        clothing_advice = self.get_clothing_advice(temperature)
 
-    # Funkcja do zapisywania ulubionej lokalizacji
-    def save_favorite_location(self):
-        location = {"state": self.selected_state.get(), "city": self.selected_city.get()}
-        self.favorite_locations.append(location)
-        with open(FILENAME, "w") as file:
-            json.dump(self.favorite_locations, file)
-        self.fav_locations_combobox['values'] = [f"{loc['state']}, {loc['city']}" for loc in self.favorite_locations]
-        messagebox.showinfo("Sukces", "Lokalizacja zapisana!")
+        self.result_label.config(
+            text=f"Pogoda: {description.capitalize()}\nTemperatura: {temperature}°C\nJakość powietrza: {air_quality_str}")
+        self.clothing_advice_label.config(text=clothing_advice)
 
-    # Funkcja do wczytania zapisanych ulubionych lokalizacji
-    def load_favorite_locations(self):
-        try:
-            with open(FILENAME, "r") as file:
-                return json.load(file)
-        except (FileNotFoundError, json.JSONDecodeError):
-            return []
+        # Wyświetlanie ramki wyników
+        self.result_frame.pack()
 
-    # Funkcja wywoływana przy wyborze ulubionej lokalizacji
+    def get_air_quality_str(self, air_quality):
+        """Przekształca wartość AQI na opis jakości powietrza"""
+        if air_quality == 1:
+            return "Bardzo dobra"
+        elif air_quality == 2:
+            return "Dobra"
+        elif air_quality == 3:
+            return "Umiarkowana"
+        elif air_quality == 4:
+            return "Zła"
+        elif air_quality == 5:
+            return "Bardzo zła"
+        return "Brak danych"
+
+    def get_clothing_advice(self, temperature):
+        """Zalecenia dotyczące odzieży w zależności od temperatury"""
+        if temperature < 5:
+            return "Zalecane: Ciepły płaszcz, rękawice, szalik."
+        elif 5 <= temperature < 15:
+            return "Zalecane: Kurtka, sweter, szalik."
+        elif 15 <= temperature < 25:
+            return "Zalecane: Lekkie ubrania, sweter, koszula."
+        else:
+            return "Zalecane: Letnia odzież, lekka koszulka."
+
+    # Funkcje do obsługi ulubionych miast
+    def load_favorites(self):
+        """Funkcja wczytująca ulubione miasta z pliku"""
+        if os.path.exists("favorites.txt"):
+            with open("favorites.txt", "r", encoding="utf-8") as file:
+                return [line.strip() for line in file.readlines()]
+        return []  # Jeśli plik nie istnieje, zwróć pustą listę
+
+    def save_favorites(self):
+        """Funkcja zapisująca ulubione miasta do pliku"""
+        with open("favorites.txt", "w", encoding="utf-8") as file:
+            for city in self.favorites:
+                file.write(f"{city}\n")
+
+    def add_to_favorites(self):
+        """Dodaje miasto do ulubionych"""
+        city = self.selected_city.get()
+        if city and city not in self.favorites:
+            self.favorites.append(city)
+            self.favorites_combobox['values'] = self.favorites
+            self.save_favorites()  # Zapisz ulubione miasta po dodaniu
+            messagebox.showinfo("Sukces", f"{city} dodane do ulubionych!")
+
+    def remove_from_favorites(self):
+        """Usuwa miasto z ulubionych"""
+        city = self.favorites_combobox.get()
+        if city and city in self.favorites:
+            self.favorites.remove(city)
+            self.favorites_combobox['values'] = self.favorites
+            self.save_favorites()  # Zapisz ulubione miasta po usunięciu
+            messagebox.showinfo("Sukces", f"{city} usunięte z ulubionych!")
+
+    def on_state_selected(self, event):
+        """Aktualizuje dostępne miasta na podstawie wybranego województwa"""
+        selected_state = self.selected_state.get()
+        cities = next(item["cities"] for item in self.countries_and_cities if item["state"] == selected_state)
+        self.city_combobox['values'] = cities
+        self.city_combobox.set("")  # Czyści pole miasta
+
     def on_favorite_selected(self, event):
-        selected = self.fav_locations_combobox.get()
-        state, city = selected.split(", ")
-        self.selected_state.set(state)
-        self.on_state_selected(None)
-        self.selected_city.set(city)
+        """Automatycznie wyświetla dane o pogodzie i jakości powietrza po wybraniu ulubionej lokalizacji"""
+        city = self.favorites_combobox.get()
+        if city:
+            self.selected_city.set(city)
+            self.fetch_data()
+    def on_state_selected(self, event):
+        """Aktualizuje dostępne miasta na podstawie wybranego województwa"""
+        selected_state = self.selected_state.get()
+        cities = next(item["cities"] for item in self.countries_and_cities if item["state"] == selected_state)
+        self.city_combobox['values'] = cities
+        self.city_combobox.set("")  # Czyści pole miasta
 
-
-# Uruchomienie aplikacji
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("Aplikacja Pogodowa")
-    root.geometry("400x600")
-    app = CarbonApp(root, None)
-    app.pack(expand=True, fill="both")
-    root.mainloop()
+    def on_favorite_selected(self, event):
+        """Automatycznie wyświetla dane o pogodzie i jakości powietrza po wybraniu ulubionej lokalizacji"""
+        city = self.favorites_combobox.get()
+        if city:
+            self.selected_city.set(city)
+            self.fetch_data()
