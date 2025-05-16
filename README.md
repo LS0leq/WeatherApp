@@ -118,10 +118,10 @@ Naszym celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostęp
 ---
 
 
-## 📅 **Harmonogram prac (stan na 07.03.2025):**
-✅ **Zapoznanie z projektem**, dobór ról oraz przygotowanie tasków do konkretnych osób.
+## 📅 **Harmonogram prac (stan na 18.05.2025):**
+✅ **Ukończenie głównej części projektu**, stworzenie formalarza i mapy pogodowej.
 
-⏳ **Praca nad projektem**, zarządzanie kodem, współpraca między rolami.
+⏳ **Praca nad AI**, stworzenie przewidywania pogody.
 
 ⏳ **Testowanie kodu** oraz weryfikacja jego jakości – poprawki oraz finalizacja.
 
