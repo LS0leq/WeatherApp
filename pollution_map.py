@@ -56,8 +56,8 @@ class PollutionMapPage(ctk.CTkFrame):
         geocoding_api_key = "054f1743e6714d5da5471ceea86bfb33"
 
         # URL do pobrania danych o pogodzie
-        weather_url = f"http://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={weather_api_key}"
-        pollution_url = f"http://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={lon}&appid={weather_api_key}"
+        weather_url = f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&units=metric&appid={weather_api_key}"
+        pollution_url = f"https://api.openweathermap.org/data/2.5/air_pollution?lat={lat}&lon={lon}&appid={weather_api_key}"
 
         try:
             # Pobieranie danych o pogodzie

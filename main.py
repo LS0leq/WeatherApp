@@ -9,7 +9,6 @@ class MainApp(tk.Tk):
         self.title("Jakość Powietrza i Mapa")
         self.configure(bg='#2E2E2E')
 
-        # Strony aplikacji
         self.frames = {}
         self.frames = {}
 

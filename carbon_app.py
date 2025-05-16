@@ -79,7 +79,7 @@ class CarbonApp(tk.Frame):
         self.selected_city = tk.StringVar()
 
         self.countries_and_cities = [
-            {"country": "Polska", "state": "Pomorskie", "cities": ["Bytów", "Gdańsk", "Gdynia", "Kościerzyna", "Pogórze", "Sopot"]},
+            {"country": "Polska", "state": "Pomorskie", "cities": ["Bytow", "Gdańsk", "Gdynia", "Kościerzyna", "Pogórze", "Sopot"]},
             {"country": "Polska", "state": "Mazowieckie", "cities": ["Warszawa", "Radom", "Płock"]},
             {"country": "Polska", "state": "Kujawsko-Pomorskie", "cities": ["Bydgoszcz", "Grudziądz", "Inowrocław", "Nakło nad Notecią", "Świecie", "Toruń", "Wilcze", "Włocławek"]},
             {"country": "Polska", "state": "Małopolskie", "cities": ["Kraków", "Muszyna", "Myslenice", "Niepolomice", "Nowy Targ", "Olkusz", "Rabka-Zdroj", "Sucha Beskidzka", "Uście Gorlickie", "Zabierzów", "Zaborze"]},
@@ -256,11 +256,12 @@ class CarbonApp(tk.Frame):
         try:
             subprocess.run([sys.executable, 'trainAI.py'], check=True)
             print("Model został wytrenowany pomyślnie")
-            if len(temps) > 6 and Path("model.pkl").exists():
+            print(len(temps))
+            if len(temps) >= 6 and Path("model.pkl").exists():
                 with open("model.pkl", "rb") as f:
                     model = pickle.load(f)
 
-                df = pd.DataFrame([temps], columns=["t-6", "t-5", "t-4", "t-3", "t-2", "t-1", "t"])
+                df = pd.DataFrame([temps], columns=["t-6", "t-5", "t-4", "t-3", "t-2", "t-1"])
                 prediction = model.predict(df)[0]
 
                 self.aiPred = f"Prognozowana temperatura za godzinę: {((prediction - 32) / 1.8):.1f}°C"
@@ -360,9 +361,12 @@ class CarbonApp(tk.Frame):
         if city == "Warszawa":
             city = "Warsaw"
 
-        api_url = f"http://api.airvisual.com/v2/city?city={city}&state={state_code}&country=POLAND&key={api_key}"
+        api_url = f"https://api.airvisual.com/v2/city?city={city}&state={state_code}&country=POLAND&key={api_key}"
+        print(api_url)
 
         try:
+
+
             response = requests.get(api_url)
             response.raise_for_status()
             data = response.json().get('data')
