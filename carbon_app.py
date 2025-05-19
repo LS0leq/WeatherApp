@@ -17,7 +17,6 @@ from urllib.parse import quote
 
 
 
-# Funkcja, która zwraca sugestie dotyczące ubioru na podstawie temperatury
 def get_outfit_suggestion(temperature):
     if temperature <= 0:
         return "Ciepły płaszcz, szalik, czapka, rękawiczki."
@@ -31,16 +30,15 @@ def get_outfit_suggestion(temperature):
         return "Woda, krem z filtrem, lekkie ubrania."
 
 
-# Funkcja, która zwraca sugestie dotyczące aktywności na świeżym powietrzu
 def get_activity_suggestion(temperature, wind_speed):
     if temperature <= 0:
         return "Zaleca się unikanie długich spacerów na zewnątrz. Możesz rozważyć aktywności w zamkniętych pomieszczeniach."
     elif 0 < temperature <= 10:
-        if wind_speed > 20:
+        if wind_speed > 5:
             return "Zaleca się krótki spacer, ale ubierz się ciepło, aby uniknąć wychłodzenia."
         return "Idealna pogoda na spacer lub krótki bieg."
     elif 10 < temperature <= 20:
-        if wind_speed > 20:
+        if wind_speed > 5:
             return "Możesz uprawiać różne aktywności na świeżym powietrzu, ale bądź przygotowany na silny wiatr."
         return "Idealna pogoda na spacer, jogging lub jazdę na rowerze."
     elif 20 < temperature <= 30:
@@ -49,7 +47,6 @@ def get_activity_suggestion(temperature, wind_speed):
         return "Możesz uprawiać aktywności na świeżym powietrzu, ale pamiętaj o odpowiedniej ochronie przed słońcem."
 
 
-# Funkcja, która zwraca sugestie dotyczące zagrożeń związanych z pogodą
 def get_hazard_suggestion(temperature, humidity, wind_speed):
     if temperature <= 0:
         return "Zimno, możliwe oblodzenia. Uważaj na śliskie drogi."
@@ -79,20 +76,38 @@ class CarbonApp(tk.Frame):
         self.selected_city = tk.StringVar()
 
         self.countries_and_cities = [
-            {"country": "Polska", "state": "Pomorskie", "cities": ["Bytow", "Gdańsk", "Gdynia", "Kościerzyna", "Pogórze", "Sopot"]},
-            {"country": "Polska", "state": "Mazowieckie", "cities": ["Warszawa", "Radom", "Płock"]},
-            {"country": "Polska", "state": "Kujawsko-Pomorskie", "cities": ["Bydgoszcz", "Grudziądz", "Inowrocław", "Nakło nad Notecią", "Świecie", "Toruń", "Wilcze", "Włocławek"]},
-            {"country": "Polska", "state": "Małopolskie", "cities": ["Kraków", "Muszyna", "Myslenice", "Niepolomice", "Nowy Targ", "Olkusz", "Rabka-Zdroj", "Sucha Beskidzka", "Uście Gorlickie", "Zabierzów", "Zaborze"]},
-            {"country": "Polska", "state": "Łódzkie", "cities": ["Ksawerów", "Kutno", "Lask", "Łódź", "Pabianice", "Piotrków Trybunalski", "Radomsko", "Zgierz"]},
-            {"country": "Polska", "state": "Lubelskie", "cities": ["Biała Podlaska", "Chełm", "Lublin", "Łódź", "Łuków", "Radzyń Podlaski", "Zamość"]},
-            {"country": "Polska", "state": "Lubuskie", "cities": ["Lubsko", "Nowa Sól", "Olbrachcice", "Zielona Góra"]},
-            {"country": "Polska", "state": "Opolskie", "cities": ["Lubsko", "Nowa Sól", "Olbrachcice", "Zielona Góra"]},
-            {"country": "Polska", "state": "Podlasie", "cities": ["Białystok", "Grajewo", "Nowa Świdziałówka", "Suwałki"]},
-            {"country": "Polska", "state": "Śląskie", "cities": ["Bielsko-Biała", "Goczałkowice-Zdrój", "Jastrzębie-Zdrój", "Katowice", "Lubliniec", "Międzybrodzie Żywieckie", "Orzesze", "Racibórz", "Rybnik", "Sosnicowice", "Sosnowiec", "Tychy", "Zawiercie"]},
-            {"country": "Polska", "state": "Podkarpackie", "cities": ["Boguchwała", "Dębica", "Jarosław", "Krempna", "Krosno", "Mielec", "Nisko", "Przemyśl", "Rudna Wielka", "Rymanów-Zdrój", "Rzeszów", "Sanok", "Tarnobrzeg"]},
-            {"country": "Polska", "state": "Świętokrzyskie", "cities": ["Kępie", "Kielce", "Łagów", "Małogoszcz", "Skarżysko-Kamienna", "Starachowice", "Wodzisław", "Wymysłów"]},
-            {"country": "Polska", "state": "Warmińsko Mazurskie", "cities": ["Działdowo", "Ełk", "Gołdap", "Olsztyn", "Ostróda", "Wygryny"]},
-            {"country": "Polska", "state": "Zachodnio Pomorskie", "cities": ["Darłowo", "Kołobrzeg", "Szczecin", "Szczecinek"]}
+            {"country": "Polska", "state": "Pomorskie",
+             "cities": ["Bytow", "Gdansk", "Gdynia", "Koscierzyna", "Pogorze", "Sopot"]},
+            {"country": "Polska", "state": "Mazowieckie", "cities": ["Warszawa", "Radom", "Plock"]},
+            {"country": "Polska", "state": "Kujawsko-Pomorskie",
+             "cities": ["Bydgoszcz", "Grudziadz", "Inowroclaw", "Naklo nad Notecia", "Swiecie", "Torun", "Wilcze",
+                        "Wloclawek"]},
+            {"country": "Polska", "state": "Małopolskie",
+             "cities": ["Krakow", "Muszyna", "Myslenice", "Niepolomice", "Nowy Targ", "Olkusz", "Rabka-Zdroj",
+                        "Sucha Beskidzka", "Uscie Gorlickie", "Zabierzow", "Zaborze"]},
+            {"country": "Polska", "state": "Łódzkie",
+             "cities": ["Ksawerow", "Kutno", "Lask", "Lodz", "Pabianice", "Piotrkow Trybunalski", "Radomsko",
+                        "Zgierz"]},
+            {"country": "Polska", "state": "Lubelskie",
+             "cities": ["Biala Podlaska", "Chelm", "Lublin", "Lodz", "Lukow", "Radzyn Podlaski", "Zamosc"]},
+            {"country": "Polska", "state": "Lubuskie", "cities": ["Lubsko", "Nowa Sol", "Olbrachcice", "Zielona Gora"]},
+            {"country": "Polska", "state": "Opolskie", "cities": ["Lubsko", "Nowa Sol", "Olbrachcice", "Zielona Gora"]},
+            {"country": "Polska", "state": "Podlasie",
+             "cities": ["Bialystok", "Grajewo", "Nowa Swidzialowka", "Suwalki"]},
+            {"country": "Polska", "state": "Śląskie",
+             "cities": ["Bielsko-Biala", "Goczalkowice-Zdroj", "Jastrzebie-Zdroj", "Katowice", "Lubliniec",
+                        "Miedzybrodzie Zywieckie", "Orzesze", "Raciborz", "Rybnik", "Sosnicowice", "Sosnowiec", "Tychy",
+                        "Zawiercie"]},
+            {"country": "Polska", "state": "Podkarpackie",
+             "cities": ["Boguchwala", "Debica", "Jaroslaw", "Krempna", "Krosno", "Mielec", "Nisko", "Przemysl",
+                        "Rudna Wielka", "Rymanow-Zdroj", "Rzeszow", "Sanok", "Tarnobrzeg"]},
+            {"country": "Polska", "state": "Świętokrzyskie",
+             "cities": ["Kepie", "Kielce", "Lagow", "Malogoszcz", "Skarzysko-Kamienna", "Starachowice", "Wodzislaw",
+                        "Wymyslow"]},
+            {"country": "Polska", "state": "Warmińsko Mazurskie",
+             "cities": ["Dzialdowo", "Elk", "Goldap", "Olsztyn", "Ostroda", "Wygryny"]},
+            {"country": "Polska", "state": "Zachodnio Pomorskie",
+             "cities": ["Darlowo", "Kolobrzeg", "Szczecin", "Szczecinek"]}
         ]
 
         self.state_to_api_mapping = {
@@ -165,8 +180,7 @@ class CarbonApp(tk.Frame):
             for i in range(len(temperatures) - 6):
                 row = temperatures[i:i + 8]
                 rows.append(row)
-                print(x)
-                x += 1
+
 
             columns = ['t-6','t-5', 't-4', 't-3', 't-2', 't-1', 't', 't+1']
             df = pd.DataFrame(rows, columns=columns)
@@ -271,7 +285,6 @@ class CarbonApp(tk.Frame):
                     predAI = file.readlines()
                     predAI = str(round(float(predAI[0]), 1))
 
-                print(predAI)
 
                 self.aiPred = f"Prognozowana temperatura za godzinę: {predAI}°C"
                 self.ai.config(text=self.aiPred)
@@ -381,18 +394,25 @@ class CarbonApp(tk.Frame):
             data = response.json().get('data')
 
             if data:
+
                 aqi = data['current']['pollution']['aqius']
                 color = self.get_color_based_on_aqi(aqi)
                 weather = data['current']['weather']
                 time = weather['ts']
                 dt = datetime.strptime(time, "%Y-%m-%dT%H:%M:%S.%fZ")
                 date_only = dt.date()
+                outfit = get_outfit_suggestion(weather['tp'])
+                act = get_activity_suggestion(weather['tp'],weather['ws'])
+                hazard = get_hazard_suggestion(weather['tp'],weather['hu'],weather['ws'])
                 result_text = (
+                    f"Data: {date_only}\n"
                     f"AQI: {aqi} ({color})\n"
                     f"Temperatura: {weather['tp']}°C\n"
                     f"Wilgotność: {weather['hu']}%\n"
                     f"Ciśnienie: {weather['pr']} hPa\n"
-                    f"Data: {date_only}"
+                    f"Proponowany ubiór: {outfit}\n"
+                    f"Proponowana aktywność: {act}\n"
+                    f"Możliwe zagrożenia: {hazard}\n"
                 )
                 self.result_label.config(text=result_text)
             else:
