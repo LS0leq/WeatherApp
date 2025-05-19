@@ -141,6 +141,7 @@ class CarbonApp(tk.Frame):
             f.write("\n".join(self.favorite_locations))
     def generate(self):
         try:
+            x=1
             with open("weather_data.txt", "r") as file:
                 lines = file.readlines()
 
@@ -156,6 +157,7 @@ class CarbonApp(tk.Frame):
                     temp = float(match.group(1))
                     temperatures.append(temp)
 
+
             if len(temperatures) < 7:
                 raise ValueError("Za mało danych pogodowych (minimum 7 temperatur potrzebne)")
 
@@ -163,6 +165,8 @@ class CarbonApp(tk.Frame):
             for i in range(len(temperatures) - 6):
                 row = temperatures[i:i + 8]
                 rows.append(row)
+                print(x)
+                x += 1
 
             columns = ['t-6','t-5', 't-4', 't-3', 't-2', 't-1', 't', 't+1']
             df = pd.DataFrame(rows, columns=columns)
@@ -204,7 +208,7 @@ class CarbonApp(tk.Frame):
             messagebox.showerror("Błąd", "Proszę wybrać miasto.")
             return
 
-        for day_offset in range(2):
+        for day_offset in range(4):
             date = (datetime.now() - timedelta(days=day_offset)).strftime("%Y-%m-%d")
             url = f"https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/{city}/{date}?key={api_key}&include=hours"
             try:
@@ -249,22 +253,27 @@ class CarbonApp(tk.Frame):
             with open("weather_data.txt", "w") as f:
                 for data in weather_data:
                     f.write(
-                        f"{data['date']} {data['time']} - Temp: {data['temperature']}°C, Wilgotność: {data['humidity']}%, Warunki: {data['conditions']}\n")
+                        f"{data['date']} {data['time']} - Temp: {((data['temperature'])-32)/1.8}°C, Wilgotność: {data['humidity']}%, Warunki: {data['conditions']}\n")
 
         self.generate()
 
         try:
             subprocess.run([sys.executable, 'trainAI.py'], check=True)
-            print("Model został wytrenowany pomyślnie")
-            print(len(temps))
             if len(temps) >= 6 and Path("model.pkl").exists():
                 with open("model.pkl", "rb") as f:
                     model = pickle.load(f)
 
-                df = pd.DataFrame([temps], columns=["t-6", "t-5", "t-4", "t-3", "t-2", "t-1"])
-                prediction = model.predict(df)[0]
+                df = pd.DataFrame(
+                    [temps],
+                    columns=[f"t" if (6 - i) == 0 else f"t-{6 - i}" for i in range(len(temps))]
+                )
+                with open("pred.txt", "r") as file:
+                    predAI = file.readlines()
+                    predAI = str(round(float(predAI[0]), 1))
 
-                self.aiPred = f"Prognozowana temperatura za godzinę: {((prediction - 32) / 1.8):.1f}°C"
+                print(predAI)
+
+                self.aiPred = f"Prognozowana temperatura za godzinę: {predAI}°C"
                 self.ai.config(text=self.aiPred)
 
             elif not Path("model.pkl").exists():
