@@ -82,5 +82,45 @@ class TestFrontend(unittest.TestCase):
         self.pollution_map.remove_marker()
         self.assertIsNone(self.pollution_map.current_marker)
 
+    def test_carbon_app_favorites_add_and_remove(self):
+        """Test dodawania i usuwania ulubionych lokalizacji."""
+        initial_count = len(self.carbon_app.favorite_locations)
+        self.carbon_app.selected_state.set("Mazowieckie")
+        self.carbon_app.selected_city.set("Warszawa")
+        self.carbon_app.add_favorite()
+        self.assertIn("Mazowieckie, Warszawa", self.carbon_app.favorite_locations)
+        self.carbon_app.favorites_listbox.selection_set(0)
+        self.carbon_app.delete_favorite()
+        self.assertEqual(len(self.carbon_app.favorite_locations), initial_count)
+
+    def test_carbon_app_update_favorites_listbox(self):
+        """Test aktualizacji listy ulubionych."""
+        self.carbon_app.favorite_locations = ["Mazowieckie, Warszawa"]
+        self.carbon_app.update_favorites_listbox()
+        self.assertEqual(self.carbon_app.favorites_listbox.get(0), "Mazowieckie, Warszawa")
+
+    def test_carbon_app_selected_favorite(self):
+        """Test wyboru ulubionej lokalizacji."""
+        self.carbon_app.favorite_locations = ["Mazowieckie, Warszawa"]
+        self.carbon_app.update_favorites_listbox()
+        self.carbon_app.favorites_listbox.selection_set(0)
+        event = type('Event', (object,), {'widget': self.carbon_app.favorites_listbox})()
+        self.carbon_app.selected_favorite(event)
+        self.assertEqual(self.carbon_app.selected_state.get(), "Mazowieckie")
+
+    def test_pollution_map_info_label_text(self):
+        """Test czy etykieta info_label zawiera odpowiedni tekst."""
+        self.assertIn("Informacje o jakości powietrza", self.pollution_map.info_label.cget("text"))
+
+    def test_pollution_map_info_text_default(self):
+        """Test domyślnego tekstu info_text."""
+        self.assertIn("Wybierz punkt na mapie", self.pollution_map.info_text.cget("text"))
+
+    def test_pollution_map_get_pollution_level(self):
+        """Test metody get_pollution_level."""
+        pollution = {'co': 10, 'no2': 10, 'pm2_5': 5, 'pm10': 10}
+        level = self.pollution_map.get_pollution_level(pollution)
+        self.assertIn("dobra", level)
+
 if __name__ == "__main__":
     unittest.main()
