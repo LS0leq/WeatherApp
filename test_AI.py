@@ -5,90 +5,100 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 import numpy as np
 import matplotlib.pyplot as plt
+from datetime import datetime
+import os
 
 
 class TestModel(unittest.TestCase):
+    test_results = {'passed': [], 'failed': [], 'mse': None}
+
     @classmethod
     def setUpClass(cls):
         # Załaduj dane testowe
         cls.df = pd.read_csv('ml_dataset.csv').dropna(subset=['t+1'])
-        cls.X = cls.df[['t-6','t-5', 't-4', 't-3', 't-2', 't-1']]
+        cls.feature_columns = ['t-6', 't-5', 't-4', 't-3', 't-2', 't-1', 't']
+        cls.X = cls.df[cls.feature_columns].copy()
         cls.y = cls.df['t+1']
 
-        # Załaduj wytrenowany model
         with open('model.pkl', 'rb') as f:
             cls.model = pickle.load(f)
 
+    def setUp(self):
+        self._startTime = datetime.now()
 
-
+    def tearDown(self):
+        self._endTime = datetime.now()
+        self._elapsedTime = self._endTime - self._startTime
+        self.test_results[self._testMethodName] = {
+            'time': self._elapsedTime.total_seconds(),
+            'status': 'passed' if self._outcome.success else 'failed'
+        }
 
     def test_model_instance(self):
-        # Sprawdź czy model to LinearRegression
         self.assertIsInstance(self.model, LinearRegression)
 
     def test_model_prediction_shape(self):
         y_pred = self.model.predict(self.X)
         self.assertEqual(len(y_pred), len(self.X))
 
-    def generate_synthetic_data(num_samples=100):
-        data = {
-            't-6': np.random.randn(num_samples),
-            't-5': np.random.randn(num_samples),
-            't-4': np.random.randn(num_samples),
-            't-3': np.random.randn(num_samples),
-            't-2': np.random.randn(num_samples),
-            't-1': np.random.randn(num_samples),
-        }
-
-        df = pd.DataFrame(data)
-
-        df['t+1'] = df.sum(axis=1) + np.random.normal(0, 0.1, size=num_samples)
-
-        return df
-
-
-    def generate_weather_like_data(num_samples=800, base_temp=15):
-        np.random.seed(42)
-
-        temps = [base_temp]
-
-        for i in range(1, num_samples + 6):
-            delta = np.random.normal(loc=0, scale=1)
-            new_temp = temps[-1] + delta
-            temps.append(new_temp)
-
-        data = {
-            't-6': temps[0:num_samples],
-            't-5': temps[1:num_samples + 1],
-            't-4': temps[2:num_samples + 2],
-            't-3': temps[3:num_samples + 3],
-            't-2': temps[4:num_samples + 4],
-            't-1': temps[5:num_samples + 5],
-        }
-
-        df = pd.DataFrame(data)
-
-        df['t+1'] = temps[6:num_samples + 6] + np.random.normal(0, 0.5, size=num_samples)
-
-        return df
-
-    df_weather = generate_weather_like_data(1000)
-    print(df_weather.head())
-    print(df_weather.tail())
-    result_df = pd.DataFrame({'Prawdziwa': y_test[:5].values, 'Przewidziana': y_pred[:5]})
-    print(result_df)
-
-    synthetic_df = generate_synthetic_data(200)
-    # print(synthetic_df.head())
-
-
-
-
     def test_model_mse_reasonable(self):
-        # Sprawdź czy MSE nie jest zbyt wysokie (prosty sanity check)
-        y_pred = self.model.predict(self.X)
+        X_test = self.X.copy()
+        y_pred = self.model.predict(X_test)
         mse = mean_squared_error(self.y, y_pred)
-        self.assertLess(mse, 100)  # wartość graniczna do dostosowania pod dane
+        TestModel.test_results['mse'] = mse
+        self.assertLess(mse, 100)
+
+    @classmethod
+    def generate_report(cls):
+        current_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        report_filename = f'test_report_{current_time}.txt'
+
+        temp_range = {
+            'min': cls.df[cls.feature_columns].min().min(),
+            'max': cls.df[cls.feature_columns].max().max()
+        }
+
+        report_content = f"""
+RAPORT Z WYKONANIA TESTÓW MODELU PREDYKCYJNEGO
+
+Data wykonania: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
+Status: {'POZYTYWNY ✓' if all(test['status'] == 'passed' for test in cls.test_results.values() if isinstance(test, dict)) else 'NEGATYWNY ✗'}
+
+WYKONANE TESTY:
+1. test_model_instance - {'✓' if cls.test_results['test_model_instance']['status'] == 'passed' else '✗'} ({cls.test_results['test_model_instance']['time']:.3f}s)
+   - Weryfikacja typu modelu (LinearRegression)
+
+2. test_model_prediction_shape - {'✓' if cls.test_results['test_model_prediction_shape']['status'] == 'passed' else '✗'} ({cls.test_results['test_model_prediction_shape']['time']:.3f}s)
+   - Sprawdzenie wymiarów predykcji
+
+3. test_model_mse_reasonable - {'✓' if cls.test_results['test_model_mse_reasonable']['status'] == 'passed' else '✗'} ({cls.test_results['test_model_mse_reasonable']['time']:.3f}s)
+   - Weryfikacja jakości predykcji (MSE < 100)
+   - Uzyskane MSE: {cls.test_results['mse']:.4f}
+
+ANALIZA DANYCH TESTOWYCH:
+- Zakres temperatur: {temp_range['min']:.2f}°C - {temp_range['max']:.2f}°C
+- Liczba próbek: {len(cls.df)}
+- Wykorzystane cechy: {', '.join(cls.feature_columns)}
+
+WNIOSKI:
+1. Model {'jest' if cls.test_results['test_model_instance']['status'] == 'passed' else 'nie jest'} poprawnie załadowany i skonfigurowany
+2. Predykcje {'są' if cls.test_results['test_model_prediction_shape']['status'] == 'passed' else 'nie są'} generowane zgodnie z oczekiwaniami
+3. Błąd predykcji {'jest' if cls.test_results['test_model_mse_reasonable']['status'] == 'passed' else 'nie jest'} w akceptowalnym zakresie
+
+Status końcowy: {'OK - wszystkie testy zakończone sukcesem' if all(test['status'] == 'passed' for test in cls.test_results.values() if isinstance(test, dict)) else 'BŁĄD - niektóre testy nie powiodły się'}
+"""
+
+        with open(report_filename, 'w', encoding='utf-8') as f:
+            f.write(report_content)
+
+        print(f"Raport został zapisany do pliku: {report_filename}")
+
 
 if __name__ == '__main__':
-    unittest.main()
+    # Uruchomienie testów
+    runner = unittest.TextTestRunner(verbosity=2)
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestModel)
+    result = runner.run(suite)
+
+    # Generowanie raportu
+    TestModel.generate_report()

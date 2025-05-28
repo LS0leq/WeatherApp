@@ -1,14 +1,28 @@
-2025-05-15 16:00:00 - Temp: 49.9°C, Wilgotność: 57.53%, Warunki: Rain, Partially cloudy
-2025-05-15 17:00:00 - Temp: 48.1°C, Wilgotność: 66.06%, Warunki: Rain, Partially cloudy
-2025-05-15 18:00:00 - Temp: 48.1°C, Wilgotność: 70.88%, Warunki: Partially cloudy
-2025-05-15 19:00:00 - Temp: 49.9°C, Wilgotność: 53.55%, Warunki: Partially cloudy
-2025-05-15 20:00:00 - Temp: 48.1°C, Wilgotność: 61.53%, Warunki: Partially cloudy
-2025-05-15 21:00:00 - Temp: 45.2°C, Wilgotność: 79.02%, Warunki: Rain, Overcast
-2025-05-15 22:00:00 - Temp: 44.7°C, Wilgotność: 84.12%, Warunki: Rain, Overcast
-2025-05-14 16:00:00 - Temp: 67.9°C, Wilgotność: 42.87%, Warunki: Rain, Partially cloudy
-2025-05-14 17:00:00 - Temp: 66.1°C, Wilgotność: 42.59%, Warunki: Rain, Partially cloudy
-2025-05-14 18:00:00 - Temp: 62.5°C, Wilgotność: 51.73%, Warunki: Rain, Partially cloudy
-2025-05-14 19:00:00 - Temp: 48.1°C, Wilgotność: 81.48%, Warunki: Rain, Partially cloudy
-2025-05-14 20:00:00 - Temp: 46.3°C, Wilgotność: 75.85%, Warunki: Rain, Overcast
-2025-05-14 21:00:00 - Temp: 44.5°C, Wilgotność: 75.68%, Warunki: Partially cloudy
-2025-05-14 22:00:00 - Temp: 42.7°C, Wilgotność: 81.07%, Warunki: Partially cloudy
+2025-05-26 05:00:00 - Temp: 10.944444444444446°C, Wilgotność: 87.47%, Warunki: Rain, Partially cloudy
+2025-05-26 06:00:00 - Temp: 12.944444444444443°C, Wilgotność: 82.0%, Warunki: Rain, Overcast
+2025-05-26 07:00:00 - Temp: 12.944444444444443°C, Wilgotność: 87.65%, Warunki: Rain, Partially cloudy
+2025-05-26 08:00:00 - Temp: 13.944444444444445°C, Wilgotność: 87.74%, Warunki: Rain, Partially cloudy
+2025-05-26 09:00:00 - Temp: 13.944444444444445°C, Wilgotność: 87.74%, Warunki: Rain, Partially cloudy
+2025-05-26 10:00:00 - Temp: 14.944444444444443°C, Wilgotność: 84.45%, Warunki: Rain, Overcast
+2025-05-26 11:00:00 - Temp: 15.444444444444443°C, Wilgotność: 77.58%, Warunki: Rain, Overcast
+2025-05-25 05:00:00 - Temp: 3.944444444444445°C, Wilgotność: 93.19%, Warunki: Clear
+2025-05-25 06:00:00 - Temp: 6.944444444444445°C, Wilgotność: 81.21%, Warunki: Clear
+2025-05-25 07:00:00 - Temp: 9.944444444444443°C, Wilgotność: 66.28%, Warunki: Clear
+2025-05-25 08:00:00 - Temp: 12.944444444444443°C, Wilgotność: 50.65%, Warunki: Clear
+2025-05-25 09:00:00 - Temp: 14.944444444444443°C, Wilgotność: 44.49%, Warunki: Clear
+2025-05-25 10:00:00 - Temp: 15.944444444444446°C, Wilgotność: 38.86%, Warunki: Clear
+2025-05-25 11:00:00 - Temp: 16.944444444444443°C, Wilgotność: 39.15%, Warunki: Clear
+2025-05-24 05:00:00 - Temp: 1.9444444444444444°C, Wilgotność: 100.0%, Warunki: Partially cloudy
+2025-05-24 06:00:00 - Temp: 3.944444444444445°C, Wilgotność: 86.8%, Warunki: Clear
+2025-05-24 07:00:00 - Temp: 7.944444444444443°C, Wilgotność: 75.85%, Warunki: Clear
+2025-05-24 08:00:00 - Temp: 9.944444444444443°C, Wilgotność: 66.28%, Warunki: Clear
+2025-05-24 09:00:00 - Temp: 11.944444444444445°C, Wilgotność: 54.08%, Warunki: Partially cloudy
+2025-05-24 10:00:00 - Temp: 12.944444444444443°C, Wilgotność: 47.17%, Warunki: Partially cloudy
+2025-05-24 11:00:00 - Temp: 12.944444444444443°C, Wilgotność: 47.17%, Warunki: Partially cloudy
+2025-05-23 05:00:00 - Temp: 4.944444444444444°C, Wilgotność: 80.94%, Warunki: Partially cloudy
+2025-05-23 06:00:00 - Temp: 5.9444444444444455°C, Wilgotność: 81.07%, Warunki: Partially cloudy
+2025-05-23 07:00:00 - Temp: 6.944444444444445°C, Wilgotność: 81.21%, Warunki: Partially cloudy
+2025-05-23 08:00:00 - Temp: 7.944444444444443°C, Wilgotność: 70.69%, Warunki: Partially cloudy
+2025-05-23 09:00:00 - Temp: 8.944444444444445°C, Wilgotność: 61.53%, Warunki: Partially cloudy
+2025-05-23 10:00:00 - Temp: 9.944444444444443°C, Wilgotność: 53.55%, Warunki: Partially cloudy
+2025-05-23 11:00:00 - Temp: 9.944444444444443°C, Wilgotność: 49.82%, Warunki: Partially cloudy
