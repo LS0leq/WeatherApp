@@ -7,7 +7,7 @@ import pickle
 df = pd.read_csv('ml_dataset.csv')
 df = df.dropna(subset=['t+1'])
 
-X = df[['t-6','t-5', 't-4', 't-3', 't-2', 't-1']]
+X = df[['t-6','t-5', 't-4', 't-3', 't-2', 't-1','t']]
 y = df['t+1']
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)

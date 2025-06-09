@@ -261,7 +261,7 @@ class CarbonApp(tk.Frame):
                 with open("model.pkl", "rb") as f:
                     model = pickle.load(f)
 
-                df = pd.DataFrame([temps], columns=["t-6", "t-5", "t-4", "t-3", "t-2", "t-1"])
+                df = pd.DataFrame([temps], columns=["t-6", "t-5", "t-4", "t-3", "t-2", "t-1","t"])
                 prediction = model.predict(df)[0]
 
                 self.aiPred = f"Prognozowana temperatura za godzinę: {((prediction - 32) / 1.8):.1f}°C"
