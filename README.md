@@ -1,67 +1,118 @@
-🥑 Sklep z egzotycznym warzywem
+# 🌦️ Projekt Aplikacji Pogodowej
 
-Projekt powstał jako inicjatywa pasjonatów zdrowego stylu życia i smaków z całego świata. Naszym celem jest stworzenie miejsca, w którym każdy może odkryć wyjątkowe, egzotyczne warzywo – świeże, pełne wartości odżywczych i gotowe, by odmienić Twoją kuchnię.
+Projekt wykonany na przedmiot szkolny.  
+Celem jest stworzenie intuicyjnej aplikacji pogodowej w Pythonie, dostępnej dla każdego.  
 
-📌 Nasz zespół
+---
 
-👑 Lider: 
-💻 Obsługa bazy danych:
-💻 Expert od Backendu:
-💻 Expert od Frontendu:
-🧪 Tester:
+## 📌 Role w zespole
+- 👑 Lider: **Patryk Kryger**  
+- 💻 Developer: **Olek Wąsowicz**  
+- 🧪 Tester: **Mateusz Żywicki**  
 
-📢 Kontakt i komunikacja
+---
 
-🗣️ Obsługa zamówień → Strona sklepu i e-mail
-📲 Szybki kontakt → Messenger i telefon
-📌 Kontakt biznesowy → Podczas spotkań oraz przez maila
+## 📢 Komunikacja
+- 🗣️ **Discord** → Sprinty 2 razy w tygodniu (omówienie projektu, zmiany, rozwój aplikacji)  
+- 📲 **Messenger** → Szybki kontakt i rozwiązywanie problemów  
+- 📌 **Kontakt z nauczycielem** → Podczas zajęć szkolnych oraz na Discordzie  
 
-🎯 Nasza misja
+---
 
-Chcemy, aby każdy klient miał łatwy dostęp do świeżych egzotycznych warzyw, które:
-✔ Wzbogacą codzienną dietę
-✔ Pomogą zadbać o zdrowie
-✔ Dodadzą unikalnego smaku potrawom
+## 🎯 Plan projektu
+Chcemy:  
+- zadbać o zdrowie użytkowników,  
+- pomóc im planować aktywności w zależności od pogody,  
+- wesprzeć w podejmowaniu codziennych decyzji np. dotyczących ubioru.  
 
-🏆 Nasze cele
+---
 
-✔ Dostępność i intuicyjność – proste zakupy online z szybką dostawą 🚚
-✔ Świeżość i jakość – warzywa sprowadzane od sprawdzonych dostawców 🌍
-✔ Bogactwo informacji – przy każdym produkcie znajdziesz wartości odżywcze i pomysły kulinarne 🍴
-✔ Personalizacja – możliwość stworzenia subskrypcji warzywnej 📦
-✔ Ekologiczne podejście – pakujemy produkty w przyjazne środowisku opakowania 🌱
+## 🏆 Cele projektu
+- ✔ **Dostępność i intuicyjność** – prosta obsługa, dostępność na komputery + mobilnie w przyszłości  
+- ✔ **Dokładność prognoz** – dane pogodowe z rzetelnych źródeł  
+- ✔ **Funkcjonalność**:  
+  - 🌍 Jakość powietrza  
+  - ☀️ Ciśnienie  
+  - 🌪️ Prędkość wiatru  
+- ✔ **Tryb nocny i jasny** 🌙☀️ – automatyczne dopasowanie motywu  
+- ✔ **Personalizacja** – zapisywanie ulubionych lokalizacji  
+- ✔ **Rekomendacje** – np. „Zabierz parasol”, „Idealna pogoda na rower”  
+- ✔ **Ekologiczne podejście** – sugestie działań, np. oszczędzanie wody podczas suszy  
 
-🥕 Dlaczego warto kupić u nas?
+---
 
-✔ Zdrowie – egzotyczne warzywa pełne witamin i minerałów 💪
-✔ Inspiracje kulinarne – przepisy i porady dostępne na blogu 📖
-✔ Spersonalizowane oferty – alerty o nowych dostawach i promocjach 🔔
+## 🏅 Korzyści dla użytkowników
+- ✔ **Zdrowie** – informacje o jakości powietrza i indeksie UV  
+- ✔ **Spersonalizowane alerty** – powiadomienia o zmianach pogodowych w czasie rzeczywistym  
 
-🛠 Technologie i narzędzia w naszym sklepie
+---
 
-Platforma: Sklep online (z możliwością rozszerzenia na aplikację mobilną 📱)
+## 🛠 Technologie
+- **Język programowania**: Python 🐍  
+- **API**: IQAir  
+- **Biblioteki**: (uzupełniane w trakcie projektu)  
 
-System płatności: szybkie płatności online 💳
+### AI i grafika
+- 🤖 ChatGPT / Copilot – wsparcie w programowaniu  
+- 🎨 Adobe Firefly – generowanie grafik  
 
-Narzędzia:
-🔹 Messenger – szybki kontakt
-🔹 Instagram i Facebook – inspiracje kulinarne i nowości
-🔹 GitHub – rozwój kodu sklepu i automatyzacja
+### Inne narzędzia
+- 🔹 Discord – sprinty i komunikacja  
+- 🔹 Adobe Photoshop / Illustrator – grafika aplikacji  
+- 🔹 GitHub – repozytorium kodu  
 
-💡 Plany rozwoju
+---
 
-Wprowadzenie aplikacji mobilnej 📱
+## 💡 Możliwości rozwoju
+- 📱 Rozszerzenie na iOS, Android i aplikację webową  
+- 🖼️ Widgety pogodowe na ekran główny  
+- ⌚ Aplikacja na smartwatche (Apple Watch, Wear OS)  
+- 🔔 Subskrypcja z powiadomieniami o ekstremalnych zjawiskach  
+- 🤖 Chatbot (Messenger / Discord)  
+- 📴 Tryb offline – przechowywanie ostatnich prognoz  
 
-Dodanie opcji subskrypcji z regularną dostawą 🚀
+---
 
-Integracja z chatbotem (zamówienia przez Messenger/WhatsApp) 🤖
+## 🚀 Kamienie milowe
 
-Program lojalnościowy dla stałych klientów ⭐
+### I. Planowanie i analiza (14.02.2025 – 07.03.2025)  
+✅ Zebranie wymagań i ustalenie funkcjonalności  
+✅ Podział ról i harmonogram sprintów  
+✅ Wybór technologii i źródeł danych  
+✅ Dokumentacja wstępna  
 
-🚀 Kamienie milowe
+### II. Pierwsza wersja aplikacji (07.03.2025 – 21.03.2025)  
+✅ Pobieranie danych pogodowych (temp., ciśnienie, wilgotność)  
+✅ Pobieranie jakości powietrza (AQI)  
+✅ Interfejs użytkownika w Tkinter  
+⏳ Testy poprawności danych  
 
-📌 I. Start sklepu online → Pierwsza dostawa egzotycznych warzyw
-📌 II. Rozbudowa oferty → Dodanie przepisów i pakietów degustacyjnych
-📌 III. Subskrypcje → Regularne paczki świeżych warzyw dla klientów
-📌 IV. Wersja mobilna → Zakupy przez aplikację
-📌 V. Rozwój międzynarodowy → Dostawy na rynki zagraniczne
+### III. Rozbudowa i personalizacja (marzec/kwiecień)  
+⏳ Dodatkowe dane pogodowe  
+⏳ Zapisywanie ulubionych lokalizacji  
+⏳ Rekomendacje (np. parasol, rower)  
+
+### IV. Optymalizacja i testy (kwiecień)  
+⏳ Poprawki na podstawie testów  
+⏳ Optymalizacja wydajności  
+⏳ Testy użytkowników  
+
+### V. Finalizacja wersji komputerowej (maj)  
+⏳ Poprawki UI/UX  
+⏳ Dokumentacja techniczna  
+⏳ Prezentacja projektu  
+
+### VI. Rozwój mobilny (po wersji desktopowej)  
+🔜 Badanie frameworków (Kivy, Flutter, React Native)  
+🔜 Widgety i tryb offline  
+
+---
+
+## 📅 Harmonogram (18.05.2025)
+- ✅ Ukończona główna część projektu + formularz + mapa pogodowa  
+- ⏳ Praca nad AI – prognozowanie pogody  
+- ⏳ Testy i poprawki kodu  
+- ⏳ Dokumentacja i prezentacja finalnej wersji  
+- 🔜 Wersja mobilna i dalsze ulepszenia  
+
+---
